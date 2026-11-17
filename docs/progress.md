@@ -82,6 +82,10 @@ Python's preinstalled compatible dependencies were used; psycopg was installed i
 
 API responses now also send `X-Frame-Options: DENY`, `Referrer-Policy: no-referrer` and an API-scoped CSP (`default-src 'none'; frame-ancestors 'none'`); the interactive docs pages and the download endpoint keep their own policies. Access-log redaction of `/api/v1/auth/` query strings no longer depends on uvicorn's argument count. Model IDs containing `..` or a leading/trailing `/` are rejected at configuration time. CI now requests read-only repository permissions. Covered by `services/api/tests/test_hardening.py`; full API suite, ruff, typecheck and build pass. Playwright e2e was not re-run. Larger refactors and deployment-dependent items are recorded in `docs/open-decisions.md`.
 
+## Structure refactor (behavior-neutral)
+
+`services/api/app/main.py` now only assembles the app; the HTTP layer (`http_layer.py`), shared dependencies and idempotent mutation helpers (`deps.py`), workspace/invitation routes (`workspace_routes.py`) and task routes (`task_routes.py`, `task_item_routes.py`) live in their own modules with the same route registration order. `browser_auth.py` splits the OIDC callback into small helpers (code exchange, ID-token verification, session creation). In `apps/web/src`, `TaskCard`, `TaskRow`, `Modal`, `TaskEditor`, `TaskDetails`, `Calendar` and `ProposalCard` moved into their own files unchanged. Verified by the unchanged API suite, the regenerated OpenAPI contract having no diff, and the Playwright e2e suite. `App()` (about 1,170 lines) and `Capture()` (about 790 lines) are still large; extracting their state into hooks is deferred because only e2e covers it.
+
 ## Remaining work
 
 - Validate and harden the local identity flow for a production deployment: TLS/hostnames, production Keycloak DB/backups, real SMTP, MFA/operator policy, global revocation and operational invitation access. Local sign-in is implemented; external beta remains gated.
