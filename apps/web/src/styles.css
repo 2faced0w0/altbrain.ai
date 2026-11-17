@@ -1187,7 +1187,7 @@ main {
 .detail-content {
   padding: var(--space-8);
 }
-.detail-content > h1 {
+.detail-content > .detail-title {
   font-family: "Manrope", sans-serif;
   font-size: var(--fs-2xl);
   line-height: 1.5;
@@ -1948,7 +1948,7 @@ main {
   .detail-content {
     padding: var(--space-8);
   }
-  .detail-content > h1 {
+  .detail-content > .detail-title {
     font-size: var(--fs-2xl);
   }
   .modal-heading {
@@ -2026,5 +2026,52 @@ main h1:focus {
 @media (max-width: 680px) {
   .task-scope {
     display: none;
+  }
+}
+
+/* Phase 3b: task details and editor */
+.drawer .detail-actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  margin: 0;
+  padding: var(--space-5) var(--space-8);
+  background: var(--surface-page);
+  border-top: 1px solid var(--line);
+}
+.form-section {
+  border: 0;
+  padding: 0;
+  margin: 0 0 var(--space-8);
+  min-width: 0;
+}
+.form-section > legend {
+  padding: 0;
+  margin-bottom: var(--space-4);
+  font-size: var(--fs-xs);
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.task-form .form-actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  background: var(--surface-page);
+  margin: 0 calc(-1 * var(--space-8)) calc(-1 * var(--space-8));
+  padding: var(--space-6) var(--space-8);
+}
+/* Phase 3b mobile: keep the three drawer actions on one row */
+@media (max-width: 680px) {
+  .drawer .detail-actions {
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-5);
+  }
+  .drawer .detail-actions > button {
+    flex: 1 1 0;
+    justify-content: center;
+    min-width: 0;
+    padding-inline: var(--space-3);
   }
 }

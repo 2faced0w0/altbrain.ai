@@ -226,3 +226,26 @@
     margin-top: var(--space-7);
   }
 }
+
+/* Phase 3b: styled progress bar (the native one renders as a flat gray strip) */
+.work-progress progress {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 8px;
+  border: 0;
+  border-radius: 4px;
+  background: var(--surface-sage);
+  overflow: hidden;
+}
+.work-progress progress::-webkit-progress-bar {
+  background: var(--surface-sage);
+  border-radius: 4px;
+}
+.work-progress progress::-webkit-progress-value {
+  background: var(--accent);
+  border-radius: 4px;
+}
+.work-progress progress::-moz-progress-bar {
+  background: var(--accent);
+  border-radius: 4px;
+}

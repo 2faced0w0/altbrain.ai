@@ -8,11 +8,12 @@ import {
   Flag,
   ShieldCheck,
   Sparkles,
+  TriangleAlert,
 } from "lucide-react";
 import * as api from "./api";
 import type { Activity, Task } from "./api";
-import { labels, Status } from "./taskMeta";
-import { dateLabel, timeLabel } from "./dates";
+import { isActive, labels, Status } from "./taskMeta";
+import { dateLabel, localDay, timeLabel } from "./dates";
 import { Modal } from "./Modal";
 import { TaskWork } from "./TaskWork";
 import { TaskSchedule } from "./TaskSchedule";
@@ -98,19 +99,24 @@ export function TaskDetails({
       active = false;
     };
   }, [task.id, task.version]);
+  const overdue =
+    isActive(task) &&
+    task.due_at &&
+    localDay(task.due_at, zone) < localDay(new Date(), zone);
   return (
     <Modal title="Task details" onClose={onClose} wide>
       <div className="detail-content">
         <span className="category-chip">{task.category}</span>
-        <h1>{task.title}</h1>
+        <h2 className="detail-title">{task.title}</h2>
         {mutationError && <Banner as="p">{mutationError}</Banner>}
         <div className="detail-meta">
           <span className={`priority-badge ${task.priority}`}>
             <Flag size={13} />
             {task.priority} priority
           </span>
-          <span>
-            <CalendarDays size={14} />
+          <span className={overdue ? "overdue" : ""}>
+            {overdue ? <TriangleAlert size={14} /> : <CalendarDays size={14} />}
+            {overdue && <span className="sr-only">Overdue: </span>}
             {dateLabel(task.due_at, zone)}
           </span>
         </div>
@@ -144,31 +150,6 @@ export function TaskDetails({
             </p>
           </div>
         )}
-        <div className="detail-actions">
-          <Button
-            variant="primary"
-            onClick={onEdit}
-            disabled={pending || workBusy}
-          >
-            Edit task <ArrowUpRight size={15} />
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={onAsk}
-            disabled={pending || workBusy}
-          >
-            <Sparkles size={15} />
-            Ask assistant
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={onArchive}
-            disabled={pending || workBusy}
-          >
-            <Archive size={15} />
-            {task.archived_at ? "Restore task" : "Archive"}
-          </Button>
-        </div>
         {source && (
           <section className="source-panel">
             <h3>Approved capture source</h3>
@@ -236,6 +217,31 @@ export function TaskDetails({
           <ShieldCheck size={13} />
           Saved changes are preserved in append-only history.
         </p>
+      </div>
+      <div className="detail-actions">
+        <Button
+          variant="primary"
+          onClick={onEdit}
+          disabled={pending || workBusy}
+        >
+          Edit task <ArrowUpRight size={15} />
+        </Button>
+        <Button
+          variant="secondary"
+          onClick={onAsk}
+          disabled={pending || workBusy}
+        >
+          <Sparkles size={15} />
+          Ask assistant
+        </Button>
+        <Button
+          variant="secondary"
+          onClick={onArchive}
+          disabled={pending || workBusy}
+        >
+          <Archive size={15} />
+          {task.archived_at ? "Restore task" : "Archive"}
+        </Button>
       </div>
     </Modal>
   );

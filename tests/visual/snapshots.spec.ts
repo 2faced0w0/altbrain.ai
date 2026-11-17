@@ -173,5 +173,12 @@ test.describe.serial("visual baselines", () => {
       page.getByRole("button", { name: "Edit task", exact: true }),
     ).toBeVisible();
     await shot(page, "mobile-task-details", [".timeline-event"]);
+    await page.getByRole("button", { name: "Close dialog", exact: true }).click();
+
+    await page.getByRole("button", { name: "New task", exact: true }).click();
+    await expect(
+      page.getByRole("textbox", { name: "Task title", exact: true }),
+    ).toBeVisible();
+    await shot(page, "mobile-task-editor");
   });
 });

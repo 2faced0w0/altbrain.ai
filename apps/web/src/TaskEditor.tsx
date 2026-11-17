@@ -125,113 +125,132 @@ export function TaskEditor({
             )}
           </Banner>
         )}
-        <Field>
-          Task title
-          <input
-            name="title"
-            required
-            maxLength={200}
-            autoFocus
-            placeholder="What would you like to work on?"
-            defaultValue={task?.title}
-          />
-        </Field>
-        <Field>
-          Description <span>optional</span>
-          <textarea
-            name="description"
-            rows={4}
-            maxLength={10000}
-            placeholder="A little context, a next step, or a useful detail…"
-            defaultValue={task?.description}
-          />
-        </Field>
-        <div className="form-grid">
+        <fieldset className="form-section">
+          <legend>What</legend>
           <Field>
-            Status
-            <select name="status" defaultValue={task?.status || initialStatus}>
-              {Object.entries(labels).map(([value, label]) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
-            </select>
-          </Field>
-          <Field>
-            Priority
-            <select name="priority" defaultValue={task?.priority || "medium"}>
-              {["low", "medium", "high", "urgent"].map((value) => (
-                <option key={value} value={value}>
-                  {value.charAt(0).toUpperCase() + value.slice(1)}
-                </option>
-              ))}
-            </select>
-          </Field>
-        </div>
-        <Field>
-          Due date & time <span>in {zone}</span>
-          <input type="datetime-local" name="due_at" defaultValue={dueValue} />
-        </Field>
-        <Field>
-          Clock-change occurrence
-          <select name="fold" defaultValue="">
-            <option value="">Ask if this time occurs twice</option>
-            <option value="0">First occurrence</option>
-            <option value="1">Second occurrence</option>
-          </select>
-        </Field>
-        <Field>
-          Category
-          <input
-            name="category"
-            maxLength={60}
-            defaultValue={task?.category || "General"}
-            list="categories"
-          />
-          <datalist id="categories">
-            <option>Learning & development</option>
-            <option>Assessments</option>
-            <option>Operations</option>
-            <option>Events</option>
-          </datalist>
-        </Field>
-        <Field>
-          Blocker or waiting reason
-          <textarea
-            name="blocker_reason"
-            maxLength={2000}
-            rows={2}
-            defaultValue={task?.blocker_reason || ""}
-            placeholder="What is holding this up?"
-          />
-        </Field>
-        <div className="form-grid">
-          <Field>
-            Progress source
-            <select
-              name="progress_mode"
-              defaultValue={task?.progress_mode || "steps"}
-            >
-              <option value="steps">From checklist</option>
-              <option value="manual">Manual percentage</option>
-            </select>
-          </Field>
-          <Field>
-            Manual progress (%)
+            Task title
             <input
-              name="manual_progress"
-              type="number"
-              min={0}
-              max={100}
+              name="title"
               required
-              defaultValue={task?.manual_progress || 0}
+              maxLength={200}
+              autoFocus
+              placeholder="What would you like to work on?"
+              defaultValue={task?.title}
             />
           </Field>
-        </div>
-        <p className="form-intro">
-          Manual percentage is retained separately when checklist progress is
-          selected.
-        </p>
+          <Field>
+            Description <span>optional</span>
+            <textarea
+              name="description"
+              rows={4}
+              maxLength={10000}
+              placeholder="A little context, a next step, or a useful detail…"
+              defaultValue={task?.description}
+            />
+          </Field>
+        </fieldset>
+        <fieldset className="form-section">
+          <legend>When</legend>
+          <div className="form-grid">
+            <Field>
+              Status
+              <select
+                name="status"
+                defaultValue={task?.status || initialStatus}
+              >
+                {Object.entries(labels).map(([value, label]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </Field>
+            <Field>
+              Priority
+              <select name="priority" defaultValue={task?.priority || "medium"}>
+                {["low", "medium", "high", "urgent"].map((value) => (
+                  <option key={value} value={value}>
+                    {value.charAt(0).toUpperCase() + value.slice(1)}
+                  </option>
+                ))}
+              </select>
+            </Field>
+          </div>
+          <Field>
+            Due date & time <span>in {zone}</span>
+            <input
+              type="datetime-local"
+              name="due_at"
+              defaultValue={dueValue}
+            />
+          </Field>
+          <Field>
+            Clock-change occurrence
+            <select name="fold" defaultValue="">
+              <option value="">Ask if this time occurs twice</option>
+              <option value="0">First occurrence</option>
+              <option value="1">Second occurrence</option>
+            </select>
+          </Field>
+        </fieldset>
+        <fieldset className="form-section">
+          <legend>Context</legend>
+          <Field>
+            Category
+            <input
+              name="category"
+              maxLength={60}
+              defaultValue={task?.category || "General"}
+              list="categories"
+            />
+            <datalist id="categories">
+              <option>Learning & development</option>
+              <option>Assessments</option>
+              <option>Operations</option>
+              <option>Events</option>
+            </datalist>
+          </Field>
+          <Field>
+            Blocker or waiting reason
+            <textarea
+              name="blocker_reason"
+              maxLength={2000}
+              rows={2}
+              defaultValue={task?.blocker_reason || ""}
+              placeholder="What is holding this up?"
+            />
+          </Field>
+        </fieldset>
+        <fieldset className="form-section">
+          <legend>Progress</legend>
+          <div className="form-grid">
+            <Field>
+              Progress source
+              <select
+                name="progress_mode"
+                defaultValue={task?.progress_mode || "steps"}
+              >
+                <option value="steps">From checklist</option>
+                <option value="manual">Manual percentage</option>
+              </select>
+            </Field>
+            <Field>
+              Manual progress (%)
+              <input
+                name="manual_progress"
+                type="number"
+                min={0}
+                max={100}
+                required
+                defaultValue={task?.manual_progress || 0}
+              />
+            </Field>
+          </div>
+          <p className="form-intro">
+            Manual percentage is retained separately when checklist progress is
+            selected.
+          </p>
+        </fieldset>
         <div className="form-actions">
           <Button
             variant="secondary"
