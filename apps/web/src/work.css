@@ -1,2 +1,228 @@
-.task-work{border-top:1px solid #e0e6d7;padding-top:8px;margin-top:25px}.task-work fieldset,.schedule-form fieldset{border:0;padding:0;margin:0;min-width:0}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.work-progress strong{display:block;color:#566f40;font-size:12px;margin-bottom:10px}.work-progress progress{width:100%;height:9px;accent-color:#6e8b50}.work-progress p,.work-empty,.schedule-form>p{font-size:11px;color:#68775f;line-height:1.8;margin:9px 0 14px}.task-work h3 small{font-weight:400;color:#6e7d61;margin-left:7px}.work-item{display:flex;align-items:center;flex-wrap:wrap;gap:8px;border-bottom:1px solid #e7ecdf;padding:12px 0}.work-item>label{display:flex;gap:9px;align-items:flex-start;flex:1;font-size:12px;line-height:1.7;overflow-wrap:anywhere;min-width:0}.work-item input[type=checkbox]{accent-color:#5c7844;margin-top:4px;flex-shrink:0}.text-button{font-size:11px;color:#576f40;text-decoration:underline}.work-edit{width:100%;display:flex;flex-wrap:wrap;gap:8px;background:#f1f5e9;padding:12px;border-radius:5px}.work-edit label{font-size:10px;display:flex;flex-direction:column;gap:6px;flex:1;min-width:100px}.work-edit input,.inline-form input,.note-form textarea{font-size:12px;background:#fff;border:1px solid #d8e1cc;border-radius:5px;padding:9px;width:100%;min-width:0;line-height:1.6}.inline-form{display:flex;gap:8px;margin-top:14px}.inline-form input{flex:1}.note-form textarea{resize:vertical}.note-form button{margin-top:8px}.work-note{background:#f2f5ec;border:1px solid #e1e8d6;border-radius:6px;margin:13px 0;padding:13px}.work-note p{white-space:pre-wrap;font-size:12px;line-height:1.8;overflow-wrap:anywhere}.work-note small{display:block;margin-top:9px;font-size:9px;color:#67765b}.blocker-panel{border-left:3px solid #b18a60;background:#f8f2e8;padding:1px 12px 12px;margin:20px 0}.blocker-panel h3{margin-top:12px}.blocker-panel p{font-size:12px;color:#7b6447;line-height:1.8;white-space:pre-wrap}.schedule-form{margin-top:24px;padding-top:4px;border-top:1px solid #dfe6d4}.schedule-dialog{padding:0 24px 24px}.schedule-dialog .schedule-form{margin-top:0;border-top:0}.calendar-reschedule{border-top:1px solid #e0e7d6;padding:18px}.calendar-reschedule label{max-width:500px;margin:0}.calendar-cell[aria-label]:hover{background:#f1f5e8}.task-progress-label{display:block;font-size:9px;color:#63764f;margin-top:7px}.task-card:focus-visible{outline:3px solid #658947}.task-work .error-banner{display:block;line-height:1.7}.error-banner{flex-wrap:wrap}.error-banner button{white-space:normal}.calendar-grid:not(.day-mode) .calendar-cell{min-height:110px}.calendar-task{cursor:grab}
-@media(max-width:680px){.inline-form{flex-wrap:wrap}.inline-form input{flex-basis:100%}.work-edit{display:block}.work-edit label{margin-bottom:10px}.work-item>label{font-size:13px}.note-form textarea,.inline-form input,.work-edit input{font-size:16px}.calendar-reschedule{padding:15px}.task-work{margin-top:20px}}
+.task-work {
+  border-top: 1px solid #e0e6d7;
+  padding-top: 8px;
+  margin-top: 25px;
+}
+.task-work fieldset,
+.schedule-form fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.work-progress strong {
+  display: block;
+  color: #566f40;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+.work-progress progress {
+  width: 100%;
+  height: 9px;
+  accent-color: #6e8b50;
+}
+.work-progress p,
+.work-empty,
+.schedule-form > p {
+  font-size: 11px;
+  color: #68775f;
+  line-height: 1.8;
+  margin: 9px 0 14px;
+}
+.task-work h3 small {
+  font-weight: 400;
+  color: #6e7d61;
+  margin-left: 7px;
+}
+.work-item {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  border-bottom: 1px solid #e7ecdf;
+  padding: 12px 0;
+}
+.work-item > label {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  flex: 1;
+  font-size: 12px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.work-item input[type="checkbox"] {
+  accent-color: #5c7844;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+.text-button {
+  font-size: 11px;
+  color: #576f40;
+  text-decoration: underline;
+}
+.work-edit {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  background: #f1f5e9;
+  padding: 12px;
+  border-radius: 5px;
+}
+.work-edit label {
+  font-size: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 100px;
+}
+.work-edit input,
+.inline-form input,
+.note-form textarea {
+  font-size: 12px;
+  background: #fff;
+  border: 1px solid #d8e1cc;
+  border-radius: 5px;
+  padding: 9px;
+  width: 100%;
+  min-width: 0;
+  line-height: 1.6;
+}
+.inline-form {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+.inline-form input {
+  flex: 1;
+}
+.note-form textarea {
+  resize: vertical;
+}
+.note-form button {
+  margin-top: 8px;
+}
+.work-note {
+  background: #f2f5ec;
+  border: 1px solid #e1e8d6;
+  border-radius: 6px;
+  margin: 13px 0;
+  padding: 13px;
+}
+.work-note p {
+  white-space: pre-wrap;
+  font-size: 12px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+.work-note small {
+  display: block;
+  margin-top: 9px;
+  font-size: 9px;
+  color: #67765b;
+}
+.blocker-panel {
+  border-left: 3px solid #b18a60;
+  background: #f8f2e8;
+  padding: 1px 12px 12px;
+  margin: 20px 0;
+}
+.blocker-panel h3 {
+  margin-top: 12px;
+}
+.blocker-panel p {
+  font-size: 12px;
+  color: #7b6447;
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+.schedule-form {
+  margin-top: 24px;
+  padding-top: 4px;
+  border-top: 1px solid #dfe6d4;
+}
+.schedule-dialog {
+  padding: 0 24px 24px;
+}
+.schedule-dialog .schedule-form {
+  margin-top: 0;
+  border-top: 0;
+}
+.calendar-reschedule {
+  border-top: 1px solid #e0e7d6;
+  padding: 18px;
+}
+.calendar-reschedule label {
+  max-width: 500px;
+  margin: 0;
+}
+.calendar-cell[aria-label]:hover {
+  background: #f1f5e8;
+}
+.task-progress-label {
+  display: block;
+  font-size: 9px;
+  color: #63764f;
+  margin-top: 7px;
+}
+.task-card:focus-visible {
+  outline: 3px solid #658947;
+}
+.task-work .error-banner {
+  display: block;
+  line-height: 1.7;
+}
+.error-banner {
+  flex-wrap: wrap;
+}
+.error-banner button {
+  white-space: normal;
+}
+.calendar-grid:not(.day-mode) .calendar-cell {
+  min-height: 110px;
+}
+.calendar-task {
+  cursor: grab;
+}
+@media (max-width: 680px) {
+  .inline-form {
+    flex-wrap: wrap;
+  }
+  .inline-form input {
+    flex-basis: 100%;
+  }
+  .work-edit {
+    display: block;
+  }
+  .work-edit label {
+    margin-bottom: 10px;
+  }
+  .work-item > label {
+    font-size: 13px;
+  }
+  .note-form textarea,
+  .inline-form input,
+  .work-edit input {
+    font-size: 16px;
+  }
+  .calendar-reschedule {
+    padding: 15px;
+  }
+  .task-work {
+    margin-top: 20px;
+  }
+}
