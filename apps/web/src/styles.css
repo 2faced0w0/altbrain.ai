@@ -1984,3 +1984,47 @@ main {
     max-height: 100vh;
   }
 }
+
+/* Phase 3a: Today and Board */
+.task-list,
+.task-rows,
+.column-card-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+main h1:focus {
+  outline: none;
+}
+.crumb-parent {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-5);
+}
+@media (max-width: 900px) {
+  .crumb-parent {
+    display: none;
+  }
+}
+.stat-card[aria-pressed="true"] {
+  background: var(--surface-tint);
+  border-color: var(--line-accent);
+  box-shadow: var(--shadow-xs);
+}
+.overdue {
+  font-weight: 650;
+}
+.search-field,
+.filter-group label {
+  min-height: 36px;
+  padding-block: 0;
+}
+.search-field input,
+.filter-group select {
+  align-self: stretch;
+}
+@media (max-width: 680px) {
+  .task-scope {
+    display: none;
+  }
+}

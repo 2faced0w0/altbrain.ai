@@ -1,4 +1,11 @@
-import { ArrowUpRight, CalendarDays, Check, Circle, Flag } from "lucide-react";
+import {
+  ArrowUpRight,
+  CalendarDays,
+  Check,
+  Circle,
+  Flag,
+  TriangleAlert,
+} from "lucide-react";
 import type { Task } from "./api";
 import { labels, isActive, Status } from "./taskMeta";
 import { localDay, dateLabel } from "./dates";
@@ -22,7 +29,7 @@ export function TaskRow({
     task.due_at &&
     localDay(task.due_at, zone) < localDay(new Date(), zone);
   return (
-    <div className="task-row">
+    <li className="task-row">
       <button
         className={`complete-button ${task.status === "completed" ? "checked" : ""}`}
         aria-label={
@@ -59,7 +66,8 @@ export function TaskRow({
         {task.priority}
       </span>
       <span className={`row-date ${overdue ? "overdue" : ""}`}>
-        <CalendarDays size={13} />
+        {overdue ? <TriangleAlert size={13} /> : <CalendarDays size={13} />}
+        {overdue && <span className="sr-only">Overdue: </span>}
         {dateLabel(task.due_at, zone)}
       </span>
       <Button
@@ -69,6 +77,6 @@ export function TaskRow({
       >
         <ArrowUpRight size={17} />
       </Button>
-    </div>
+    </li>
   );
 }

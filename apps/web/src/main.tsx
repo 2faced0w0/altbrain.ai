@@ -89,7 +89,9 @@ function App() {
       <div className="main-shell">
         <header className="topbar">
           <div className="breadcrumb">
-            Workspace <ChevronRight size={13} />
+            <span className="crumb-parent">
+              Workspace <ChevronRight size={13} />
+            </span>
             <strong>
               {route === "board"
                 ? "My board"

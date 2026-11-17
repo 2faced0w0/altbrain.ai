@@ -3,7 +3,10 @@ import type { TrackerApp } from "./useTrackerApp";
 
 export function StatsGrid({ app }: { app: TrackerApp }) {
   const {
-    setRoute,
+    route,
+    navigate,
+    statusFilter,
+    focusFilter,
     setSearch,
     setPriority,
     setStatusFilter,
@@ -14,6 +17,14 @@ export function StatsGrid({ app }: { app: TrackerApp }) {
     inProgress,
     completed,
   } = app;
+  const pressed = (label: string) =>
+    label === "Due today"
+      ? focusFilter === "today"
+      : label === "Needs attention"
+        ? focusFilter === "overdue"
+        : label === "In progress"
+          ? statusFilter === "in_progress"
+          : statusFilter === "completed";
   return (
     <div className="stats-grid">
       {[
@@ -49,7 +60,11 @@ export function StatsGrid({ app }: { app: TrackerApp }) {
         <button
           key={stat.label}
           className="stat-card"
+          aria-pressed={pressed(stat.label)}
           onClick={() => {
+            // Filters are set after navigate so its reset does not clear them.
+            if (stat.label === "Needs attention" && route !== "today")
+              void navigate("today");
             setSearch("");
             setPriority("all");
             setListMode(stat.label === "Completed");
@@ -67,9 +82,6 @@ export function StatsGrid({ app }: { app: TrackerApp }) {
                   ? "completed"
                   : "all",
             );
-            if (stat.label === "Needs attention") {
-              setRoute("today");
-            }
           }}
         >
           <div>

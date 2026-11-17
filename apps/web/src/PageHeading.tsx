@@ -10,7 +10,7 @@ export function PageHeading({ app }: { app: TrackerApp }) {
         <div className="eyebrow">
           <span /> YOUR WORK, A LITTLE CLEARER
         </div>
-        <h1>
+        <h1 tabIndex={-1}>
           {route === "today"
             ? `A little focus goes a long way${String.fromCharCode(46)}`
             : route === "board"

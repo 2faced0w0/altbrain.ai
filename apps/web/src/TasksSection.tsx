@@ -64,8 +64,11 @@ export function TasksSection({ app }: { app: TrackerApp }) {
           </button>
         </div>
         <span className="task-total">
-          {filtered.length} tasks <span>·</span>{" "}
-          {route === "archive" ? "Archived" : "Personal workspace"}
+          {filtered.length} tasks{" "}
+          <span className="task-scope">
+            <span>·</span>{" "}
+            {route === "archive" ? "Archived" : "Personal workspace"}
+          </span>
         </span>
       </div>
       <div className="toolbar">
@@ -152,7 +155,7 @@ export function TasksSection({ app }: { app: TrackerApp }) {
           )}
         </EmptyState>
       ) : listMode || route === "archive" || statusFilter === "cancelled" ? (
-        <div className="task-list">
+        <ul className="task-list" role="list">
           {filtered.map((task) => (
             <TaskRow
               key={task.id}
@@ -163,7 +166,7 @@ export function TasksSection({ app }: { app: TrackerApp }) {
               pending={pending}
             />
           ))}
-        </div>
+        </ul>
       ) : route === "today" ? (
         <div className="today-layout">
           <section className="focus-panel">
@@ -173,20 +176,24 @@ export function TasksSection({ app }: { app: TrackerApp }) {
               </h2>
               <span>Small steps. Real progress.</span>
             </div>
-            {filtered
-              .filter(isActive)
-              .sort((a, b) => (a.due_at || "z").localeCompare(b.due_at || "z"))
-              .slice(0, 6)
-              .map((task) => (
-                <TaskRow
-                  key={task.id}
-                  task={task}
-                  zone={zone}
-                  onOpen={openTask}
-                  onMove={moveTask}
-                  pending={pending}
-                />
-              ))}
+            <ul className="task-rows" role="list">
+              {filtered
+                .filter(isActive)
+                .sort((a, b) =>
+                  (a.due_at || "z").localeCompare(b.due_at || "z"),
+                )
+                .slice(0, 6)
+                .map((task) => (
+                  <TaskRow
+                    key={task.id}
+                    task={task}
+                    zone={zone}
+                    onOpen={openTask}
+                    onMove={moveTask}
+                    pending={pending}
+                  />
+                ))}
+            </ul>
             {!filtered.some(isActive) && (
               <EmptyState className="compact">
                 <CheckCheck size={25} />
@@ -295,16 +302,15 @@ export function TasksSection({ app }: { app: TrackerApp }) {
                   </Button>
                 </div>
                 <div className="column-cards">
-                  {filtered
-                    .filter((t) => t.status === status)
-                    .map((task) => (
-                      <TaskCard
-                        key={task.id}
-                        task={task}
-                        zone={zone}
-                        onOpen={openTask}
-                      />
-                    ))}
+                  <ul className="column-card-list" role="list">
+                    {filtered
+                      .filter((t) => t.status === status)
+                      .map((task) => (
+                        <li key={task.id}>
+                          <TaskCard task={task} zone={zone} onOpen={openTask} />
+                        </li>
+                      ))}
+                  </ul>
                   <button
                     className="add-card"
                     onClick={() => {

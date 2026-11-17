@@ -56,6 +56,7 @@ export function Sidebar({ app }: { app: TrackerApp }) {
           <button
             key={item.route}
             className={`nav-item ${route === item.route ? "active" : ""}`}
+            aria-current={route === item.route ? "page" : undefined}
             onClick={() => void navigate(item.route)}
           >
             <item.icon size={19} />
@@ -94,6 +95,7 @@ export function Sidebar({ app }: { app: TrackerApp }) {
         </div>
         <button
           className={`nav-item ${route === "archive" ? "active" : ""}`}
+          aria-current={route === "archive" ? "page" : undefined}
           onClick={() => void navigate("archive")}
         >
           <Archive size={18} />
@@ -101,6 +103,7 @@ export function Sidebar({ app }: { app: TrackerApp }) {
         </button>
         <button
           className={`nav-item ${route === "settings" ? "active" : ""}`}
+          aria-current={route === "settings" ? "page" : undefined}
           onClick={() => void navigate("settings")}
         >
           <Settings2 size={18} />

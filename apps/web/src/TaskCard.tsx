@@ -1,4 +1,10 @@
-import { CalendarDays, Circle, Flag, MoreHorizontal } from "lucide-react";
+import {
+  CalendarDays,
+  Circle,
+  Flag,
+  MoreHorizontal,
+  TriangleAlert,
+} from "lucide-react";
 import type { Task } from "./api";
 import { isActive } from "./taskMeta";
 import { localDay, dateLabel } from "./dates";
@@ -44,7 +50,8 @@ export function TaskCard({
           {task.priority}
         </span>
         <span className={overdue ? "overdue" : ""}>
-          <CalendarDays size={12} />
+          {overdue ? <TriangleAlert size={12} /> : <CalendarDays size={12} />}
+          {overdue && <span className="sr-only">Overdue: </span>}
           {dateLabel(task.due_at, zone)}
         </span>
       </div>

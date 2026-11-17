@@ -11,3 +11,16 @@ export const routeFromPath = () => {
     ? value
     : "today";
 };
+
+const ROUTE_TITLES: Record<string, string> = {
+  today: "Today",
+  board: "My board",
+  calendar: "Calendar",
+  assistant: "Capture",
+  archive: "Archive",
+  settings: "Settings",
+};
+
+export function routeTitle(route: string) {
+  return ROUTE_TITLES[route] ?? "Workroom";
+}

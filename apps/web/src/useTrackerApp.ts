@@ -4,7 +4,7 @@ import type { Profile, Task } from "./api";
 import type { AssistantView } from "./FloatingAssistant";
 import { labels, isActive, Status } from "./taskMeta";
 import { localDay } from "./dates";
-import { routeFromPath } from "./route";
+import { routeFromPath, routeTitle } from "./route";
 
 export function useTrackerApp() {
   const [route, setRoute] = useState(routeFromPath);
@@ -144,10 +144,25 @@ export function useTrackerApp() {
     return () =>
       window.removeEventListener("workroom:session-expired", expired);
   }, []);
+  const routeRef = useRef(route);
+  const announcedRoute = useRef(route);
+  useEffect(() => {
+    routeRef.current = route;
+    document.title = `${routeTitle(route)} · Workroom`;
+    // Move focus to the new page's heading after in-app navigation, not on first load.
+    if (announcedRoute.current === route) return;
+    announcedRoute.current = route;
+    document.querySelector<HTMLElement>("main h1")?.focus();
+  }, [route]);
   useEffect(() => {
     const pop = () => {
-      setRoute(routeFromPath());
+      const previous = routeRef.current;
+      const next = routeFromPath();
+      setRoute(next);
       setSelected(null);
+      // The task list holds archived tasks only on the Archive route, so reload when crossing it.
+      if ((next === "archive") !== (previous === "archive"))
+        void refresh(next).catch((e) => setError((e as Error).message));
       const params = new URLSearchParams(location.search);
       const open =
         routeFromPath() === "assistant" || params.get("ai") === "open";
