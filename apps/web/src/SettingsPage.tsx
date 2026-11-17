@@ -2,6 +2,8 @@ import { Check, Clock3, LockKeyhole, Settings2, Sparkles } from "lucide-react";
 import * as api from "./api";
 import type { Profile } from "./api";
 import type { TrackerApp } from "./useTrackerApp";
+import { Button } from "./ui/Button";
+import { Field } from "./ui/Field";
 
 export function SettingsPage({
   app,
@@ -19,7 +21,7 @@ export function SettingsPage({
         </span>
         <h2>Set your rhythm.</h2>
         <p>Dates and daily task counts follow your workspace timezone.</p>
-        <label className="form-field">
+        <Field>
           Timezone
           <select
             value={zone}
@@ -43,7 +45,7 @@ export function SettingsPage({
               <option key={v}>{v}</option>
             ))}
           </select>
-        </label>
+        </Field>
         <div className="privacy-line">
           <LockKeyhole size={17} />
           <span>
@@ -100,14 +102,15 @@ export function SettingsPage({
           Goals, exports, and reminders · upcoming
         </div>
         {!profile.local_identity && (
-          <button
-            className="secondary-button signout-button"
+          <Button
+            variant="secondary"
+            className="signout-button"
             onClick={() =>
               void api.signOut(profile.email).catch((e) => setError(e.message))
             }
           >
             Sign out
-          </button>
+          </Button>
         )}
         <div className="development-note">
           {profile.local_identity

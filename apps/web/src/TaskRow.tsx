@@ -2,6 +2,7 @@ import { ArrowUpRight, CalendarDays, Check, Circle, Flag } from "lucide-react";
 import type { Task } from "./api";
 import { labels, isActive, Status } from "./taskMeta";
 import { localDay, dateLabel } from "./dates";
+import { Button } from "./ui/Button";
 
 export function TaskRow({
   task,
@@ -61,13 +62,13 @@ export function TaskRow({
         <CalendarDays size={13} />
         {dateLabel(task.due_at, zone)}
       </span>
-      <button
-        className="icon-button"
+      <Button
+        variant="icon"
         aria-label={`Open ${task.title}`}
         onClick={() => onOpen(task)}
       >
         <ArrowUpRight size={17} />
-      </button>
+      </Button>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { X } from "lucide-react";
+import { Button } from "./ui/Button";
 
 export function Modal({
   title,
@@ -37,13 +38,9 @@ export function Modal({
     >
       <div className="modal-heading">
         <h2>{title}</h2>
-        <button
-          className="icon-button"
-          aria-label="Close dialog"
-          onClick={onClose}
-        >
+        <Button variant="icon" aria-label="Close dialog" onClick={onClose}>
           <X size={20} />
-        </button>
+        </Button>
       </div>
       {children}
     </dialog>

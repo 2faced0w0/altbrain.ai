@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import * as api from "./api";
 import type { Task, Work, Step, Deliverable } from "./api";
+import { Banner } from "./ui/Banner";
+import { Button } from "./ui/Button";
 
 export function TaskWork({
   task,
@@ -128,9 +130,9 @@ export function TaskWork({
   return (
     <section className="task-work" aria-label="Task work">
       {error && (
-        <p className="error-banner" role="alert">
+        <Banner as="p">
           {error} Your input is kept. Review the latest task before retrying.
-        </p>
+        </Banner>
       )}
       <div className="work-progress">
         <h3>Progress</h3>
@@ -205,7 +207,7 @@ export function TaskWork({
                     required
                   />
                 </label>
-                <button className="secondary-button">Save step</button>
+                <Button variant="secondary">Save step</Button>
                 <button type="button" onClick={() => setEditing(null)}>
                   Cancel
                 </button>
@@ -232,9 +234,9 @@ export function TaskWork({
             maxLength={500}
             placeholder="Add the next step…"
           />
-          <button className="secondary-button" disabled={!step.trim()}>
+          <Button variant="secondary" disabled={!step.trim()}>
             Add step
-          </button>
+          </Button>
         </form>
       </fieldset>
       <h3>Deliverables</h3>
@@ -287,7 +289,7 @@ export function TaskWork({
                     maxLength={1000}
                   />
                 </label>
-                <button className="secondary-button">Save deliverable</button>
+                <Button variant="secondary">Save deliverable</Button>
                 <button type="button" onClick={() => setEditing(null)}>
                   Cancel
                 </button>
@@ -319,9 +321,9 @@ export function TaskWork({
             maxLength={1000}
             placeholder="A document, decision, or result…"
           />
-          <button className="secondary-button" disabled={!deliverable.trim()}>
+          <Button variant="secondary" disabled={!deliverable.trim()}>
             Add deliverable
-          </button>
+          </Button>
         </form>
       </fieldset>
       <h3>Notes</h3>
@@ -347,9 +349,9 @@ export function TaskWork({
             rows={3}
             placeholder="Keep a useful detail with this task…"
           />
-          <button className="secondary-button" disabled={!note.trim()}>
+          <Button variant="secondary" disabled={!note.trim()}>
             Add note
-          </button>
+          </Button>
         </form>
       </fieldset>
       {work.notes.map((row) => (

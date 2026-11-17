@@ -30,6 +30,8 @@ import { TasksSection } from "./TasksSection";
 import { AssistantHome } from "./AssistantHome";
 import { SettingsPage } from "./SettingsPage";
 import { useTrackerApp } from "./useTrackerApp";
+import { Banner } from "./ui/Banner";
+import { Button } from "./ui/Button";
 
 function App() {
   const app = useTrackerApp();
@@ -103,13 +105,13 @@ function App() {
                   ? "Local sign-in"
                   : "Private workspace"}
             </span>
-            <button
-              className="icon-button"
+            <Button
+              variant="icon"
               aria-label="About this build"
               onClick={() => setHelp(true)}
             >
               <HelpCircle size={19} />
-            </button>
+            </Button>
             <button
               className="user-avatar small"
               aria-label="Workspace settings"
@@ -122,13 +124,13 @@ function App() {
         <main>
           <PageHeading app={app} />
           {error && (
-            <div role="alert" className="error-banner">
+            <Banner>
               <span>{error}</span>
               <button onClick={() => void start()}>Retry</button>
               <button aria-label="Dismiss error" onClick={() => setError("")}>
                 <X size={16} />
               </button>
-            </div>
+            </Banner>
           )}
           {loading ? (
             <div className="loading-state">
@@ -299,9 +301,9 @@ function App() {
               Local development uses synthetic identities and data. This build
               is not an external beta release.
             </div>
-            <button className="primary-button" onClick={() => setHelp(false)}>
+            <Button variant="primary" onClick={() => setHelp(false)}>
               Back to my work <ArrowRight size={16} />
-            </button>
+            </Button>
           </div>
         </Modal>
       )}

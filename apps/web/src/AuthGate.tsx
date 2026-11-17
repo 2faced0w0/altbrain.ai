@@ -10,6 +10,8 @@ import {
 import * as api from "./api";
 import type { components } from "./schema";
 import "./auth.css";
+import { Button } from "./ui/Button";
+import { Field } from "./ui/Field";
 export function AuthGate({ onReady }: { onReady: () => void }) {
   const [state, setState] = useState<components["schemas"]["AuthState"] | null>(
     null,
@@ -113,9 +115,9 @@ export function AuthGate({ onReady }: { onReady: () => void }) {
               The identity provider is not connected. Start the local Keycloak
               launcher or configure your server's OIDC settings.
             </p>
-            <button className="secondary-button" onClick={onReady}>
+            <Button variant="secondary" onClick={onReady}>
               Check again
-            </button>
+            </Button>
           </>
         ) : state.authenticated ? (
           <>
@@ -128,12 +130,12 @@ export function AuthGate({ onReady }: { onReady: () => void }) {
               Signed in as <strong>{state.email}</strong>
             </p>
             {state.has_workspace ? (
-              <button className="primary-button" onClick={onReady}>
+              <Button variant="primary" onClick={onReady}>
                 Open my workspace <ArrowRight size={16} />
-              </button>
+              </Button>
             ) : (
               <form onSubmit={(e) => void redeem(e)}>
-                <label className="form-field">
+                <Field>
                   Invitation code
                   <input
                     type="password"
@@ -145,8 +147,8 @@ export function AuthGate({ onReady }: { onReady: () => void }) {
                     disabled={busy}
                     onChange={(e) => setToken(e.target.value)}
                   />
-                </label>
-                <label className="form-field">
+                </Field>
+                <Field>
                   Workspace timezone
                   <input
                     required
@@ -154,16 +156,16 @@ export function AuthGate({ onReady }: { onReady: () => void }) {
                     disabled={busy}
                     onChange={(e) => setZone(e.target.value)}
                   />
-                </label>
+                </Field>
                 <p className="auth-small">
                   Use the invitation issued for this verified email. Redeeming
                   it creates a new private workspace; it does not link you to
                   anyone else's data.
                 </p>
-                <button className="primary-button" disabled={busy}>
+                <Button variant="primary" disabled={busy}>
                   {busy ? "Opening…" : "Redeem invitation"}
                   <ArrowRight size={16} />
-                </button>
+                </Button>
               </form>
             )}
             <button

@@ -5,6 +5,8 @@ import { labels } from "./taskMeta";
 import { localDay } from "./dates";
 import { Modal } from "./Modal";
 import { TaskSchedule } from "./TaskSchedule";
+import { Button } from "./ui/Button";
+import { Field } from "./ui/Field";
 
 export function Calendar({
   tasks,
@@ -70,29 +72,29 @@ export function Calendar({
               }).format(anchor)}
         </h2>
         <div className="calendar-controls">
-          <button
-            className="secondary-button"
+          <Button
+            variant="secondary"
             onClick={() => {
               setAnchor(new Date(localDay(new Date(), zone) + "T12:00:00"));
               setSelectedDate(localDay(new Date(), zone));
             }}
           >
             Today
-          </button>
-          <button
-            className="icon-button"
+          </Button>
+          <Button
+            variant="icon"
             aria-label="Previous period"
             onClick={() => shift(-1)}
           >
             <ChevronLeft size={18} />
-          </button>
-          <button
-            className="icon-button"
+          </Button>
+          <Button
+            variant="icon"
             aria-label="Next period"
             onClick={() => shift(1)}
           >
             <ChevronRight size={18} />
-          </button>
+          </Button>
           <select
             aria-label="Calendar view"
             value={mode}
@@ -184,7 +186,7 @@ export function Calendar({
         tasks stay on your board.
       </div>
       <div className="calendar-reschedule">
-        <label className="form-field">
+        <Field>
           Reschedule any task
           <select
             aria-label="Choose task to reschedule"
@@ -209,7 +211,7 @@ export function Calendar({
                 </option>
               ))}
           </select>
-        </label>
+        </Field>
       </div>
       {schedule && (
         <Modal

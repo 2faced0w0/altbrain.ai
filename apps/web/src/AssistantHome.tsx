@@ -1,5 +1,6 @@
 import { ShieldCheck, Sparkles } from "lucide-react";
 import type { TrackerApp } from "./useTrackerApp";
+import { Button } from "./ui/Button";
 
 export function AssistantHome({ app }: { app: TrackerApp }) {
   const { showAi } = app;
@@ -14,10 +15,10 @@ export function AssistantHome({ app }: { app: TrackerApp }) {
         Capture an idea, bring in a file, or pick up a task. Your conversations
         and drafts stay with you across the workspace.
       </p>
-      <button className="primary-button" onClick={() => showAi("chat")}>
+      <Button variant="primary" onClick={() => showAi("chat")}>
         <Sparkles size={17} />
         Open Workroom AI
-      </button>
+      </Button>
       <div className="assistant-home-features">
         <span>
           <Sparkles size={17} />

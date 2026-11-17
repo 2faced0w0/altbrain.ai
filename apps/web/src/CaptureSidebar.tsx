@@ -1,5 +1,6 @@
 import { Plus } from "lucide-react";
 import type { CaptureApp } from "./useCaptureState";
+import { Button } from "./ui/Button";
 
 export function CaptureSidebar({ app }: { app: CaptureApp }) {
   const {
@@ -28,14 +29,14 @@ export function CaptureSidebar({ app }: { app: CaptureApp }) {
         ) : (
           <strong>Conversations</strong>
         )}
-        <button
-          className="icon-button"
+        <Button
+          variant="icon"
           aria-label="New conversation"
           disabled={busy || loading}
           onClick={create}
         >
           <Plus size={18} />
-        </button>
+        </Button>
       </div>
       {rows.map((row) => (
         <button

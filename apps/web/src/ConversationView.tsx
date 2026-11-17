@@ -4,6 +4,7 @@ import { SourceFiles } from "./SourceFiles";
 import { TaskUpdateCard } from "./TaskUpdateCard";
 import { ProposalCard } from "./ProposalCard";
 import type { CaptureApp } from "./useCaptureState";
+import { Button } from "./ui/Button";
 
 export function ConversationView({
   app,
@@ -48,19 +49,16 @@ export function ConversationView({
               {page.task.version}
             </span>
           </div>
-          <button
-            className="secondary-button"
-            onClick={() => onOpenTask(page.task!.id)}
-          >
+          <Button variant="secondary" onClick={() => onOpenTask(page.task!.id)}>
             Open selected task
-          </button>
-          <button
-            className="secondary-button"
+          </Button>
+          <Button
+            variant="secondary"
             disabled={busy}
             onClick={() => void select(page.conversation.id, true)}
           >
             Refresh task context
-          </button>
+          </Button>
         </section>
       )}
       <div className="capture-title">
@@ -104,13 +102,13 @@ export function ConversationView({
           />
         ))}
       {page.has_older && (
-        <button
-          className="secondary-button"
+        <Button
+          variant="secondary"
           disabled={busy}
           onClick={() => void older()}
         >
           Load older messages
-        </button>
+        </Button>
       )}
       <div className="capture-history">
         {page.messages.map((message) => (
@@ -310,21 +308,21 @@ export function ConversationView({
             {draft.length.toLocaleString()}/20,000
           </span>
           <div>
-            <button
-              className="secondary-button"
+            <Button
+              variant="secondary"
               disabled={busy}
               onClick={() => void saveDraft(page.conversation, draft)}
             >
               Save draft
-            </button>
-            <button
-              className="primary-button"
+            </Button>
+            <Button
+              variant="primary"
               disabled={busy || !draft.trim() || !canSend}
               onClick={send}
             >
               <Sparkles size={15} />
               {page.task ? "Send task request" : "Review proposals"}
-            </button>
+            </Button>
           </div>
         </div>
         <p className="capture-hint">

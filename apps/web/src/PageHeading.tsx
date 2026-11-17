@@ -1,5 +1,6 @@
 import { CalendarDays, Plus } from "lucide-react";
 import type { TrackerApp } from "./useTrackerApp";
+import { Button } from "./ui/Button";
 
 export function PageHeading({ app }: { app: TrackerApp }) {
   const { route, profile, setCreateStatus, setEditor, zone } = app;
@@ -47,8 +48,8 @@ export function PageHeading({ app }: { app: TrackerApp }) {
           }).format(new Date())}
         </span>
         {route !== "settings" && route !== "assistant" && (
-          <button
-            className="primary-button"
+          <Button
+            variant="primary"
             onClick={() => {
               setCreateStatus("inbox");
               setEditor("new");
@@ -57,7 +58,7 @@ export function PageHeading({ app }: { app: TrackerApp }) {
           >
             <Plus size={17} />
             New task
-          </button>
+          </Button>
         )}
       </div>
     </div>

@@ -34,6 +34,19 @@ Use these instead of raw `px` for `font-size`, `padding`, `margin`, `gap` and `b
 
 The old UI used 6 to 13px for nearly all text (190 of 270 declarations were 6 to 11px). Everything up to 10px now maps to 11px, and 11, 12 and 13px each moved up one step. Spacing values snapped to the nearest scale step (almost always within 1px); radii of 18px and above and the few fixed layout widths were left literal.
 
+## Shared components
+
+`apps/web/src/ui/` holds the shared components. Use them instead of writing the class names by hand:
+
+| Component | Renders | Notes |
+|---|---|---|
+| `Button` | `<button class="primary-button|secondary-button|icon-button">` | `variant="primary" \| "secondary" \| "icon"`; sets no default `type`, so form behavior is unchanged |
+| `Field` | `<label class="form-field">` | wraps the label text and its control, so the control is named by the label |
+| `Banner` | `<div\|p class="error-banner" role="alert">` | pass `as="p"` for a paragraph, or `role` to override |
+| `EmptyState` | `<div\|section class="empty-state">` | |
+
+They render exactly the markup the class-based version did, so tests and CSS selectors are unaffected. Not yet components (planned with the page redesigns): pills and badges, cards, segmented tabs, toast and navigation links. The sidebar navigation stays buttons for now because the e2e tests look it up by role.
+
 ## How the tokens were derived
 
 363 distinct hex values (422 uses) were grouped by role and snapped to the nearest token. Backgrounds and borders barely moved (47 near-identical backgrounds became `--surface-tint`, 48 near-identical borders became `--line`). Text was reassigned by hue and lightness so that low-contrast greens became `--text-muted`, which is the intentional accessibility change.

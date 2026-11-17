@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import * as api from "./api";
 import type { Task } from "./api";
+import { Banner } from "./ui/Banner";
+import { Button } from "./ui/Button";
+import { Field } from "./ui/Field";
 
 export function TaskSchedule({
   task,
@@ -100,15 +103,13 @@ export function TaskSchedule({
         saving.
       </p>
       {error && (
-        <p role="alert" className="error-banner">
-          {error} Your chosen date and time are kept.
-        </p>
+        <Banner as="p">{error} Your chosen date and time are kept.</Banner>
       )}
       {notice && <p role="status">{notice}</p>}
       <fieldset disabled={busy}>
         <legend className="sr-only">New deadline</legend>
         <div className="form-grid">
-          <label className="form-field">
+          <Field>
             New due date
             <input
               name="date"
@@ -116,23 +117,23 @@ export function TaskSchedule({
               defaultValue={date || day}
               required
             />
-          </label>
-          <label className="form-field">
+          </Field>
+          <Field>
             New due time
             <input name="time" type="time" defaultValue={time} required />
-          </label>
+          </Field>
         </div>
-        <label className="form-field">
+        <Field>
           Clock-change occurrence
           <select name="fold" defaultValue="">
             <option value="">Ask if this time occurs twice</option>
             <option value="0">First occurrence</option>
             <option value="1">Second occurrence</option>
           </select>
-        </label>
-        <button className="secondary-button" type="submit">
+        </Field>
+        <Button variant="secondary" type="submit">
           {busy ? "Saving deadline…" : "Save deadline"}
-        </button>
+        </Button>
       </fieldset>
     </form>
   );

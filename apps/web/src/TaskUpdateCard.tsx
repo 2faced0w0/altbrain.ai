@@ -3,6 +3,9 @@ import { Check, X } from "lucide-react";
 import * as api from "./api";
 import type { Changes, Task, TaskUpdate } from "./api";
 import "./task-assistant.css";
+import { Banner } from "./ui/Banner";
+import { Button } from "./ui/Button";
+import { Field } from "./ui/Field";
 
 const statuses = [
   "inbox",
@@ -141,12 +144,9 @@ export function TaskUpdateCard({
               : "No task changes were made"}
           </small>
         </span>
-        <button
-          className="secondary-button"
-          onClick={() => onOpenTask(task.id)}
-        >
+        <Button variant="secondary" onClick={() => onOpenTask(task.id)}>
           Open task
-        </button>
+        </Button>
       </div>
     );
   const preview = { ...changes };
@@ -174,7 +174,7 @@ export function TaskUpdateCard({
         </p>
       ))}
       {stale && (
-        <div className="error-banner" role="alert">
+        <Banner>
           This task changed after preparation or is archived. Approval is
           disabled. Restore it if needed, refresh task context, and send a new
           request; your draft is kept.
@@ -185,10 +185,10 @@ export function TaskUpdateCard({
           >
             Refresh task context
           </button>
-        </div>
+        </Banner>
       )}
       {error && (
-        <div className="error-banner" role="alert">
+        <Banner>
           {error}
           <button
             type="button"
@@ -197,7 +197,7 @@ export function TaskUpdateCard({
           >
             Refresh task context
           </button>
-        </div>
+        </Banner>
       )}
       <table className="update-diff">
         <caption>Review before and after</caption>
@@ -233,7 +233,7 @@ export function TaskUpdateCard({
       <fieldset disabled={busy || stale}>
         <legend className="sr-only">Reviewed task changes</legend>
         <div className="form-grid">
-          <label className="form-field">
+          <Field>
             Change status
             <select
               value={changes.status ?? ""}
@@ -246,8 +246,8 @@ export function TaskUpdateCard({
                 </option>
               ))}
             </select>
-          </label>
-          <label className="form-field">
+          </Field>
+          <Field>
             Change priority
             <select
               value={changes.priority ?? ""}
@@ -260,10 +260,10 @@ export function TaskUpdateCard({
                 </option>
               ))}
             </select>
-          </label>
+          </Field>
         </div>
         <div className="form-grid">
-          <label className="form-field">
+          <Field>
             Change progress source
             <select
               value={changes.progress_mode ?? ""}
@@ -287,9 +287,9 @@ export function TaskUpdateCard({
               <option value="manual">Manual percentage</option>
               <option value="steps">From checklist</option>
             </select>
-          </label>
+          </Field>
           {changes.progress_mode === "manual" && (
-            <label className="form-field">
+            <Field>
               Proposed manual progress (%)
               <input
                 type="number"
@@ -301,7 +301,7 @@ export function TaskUpdateCard({
                   field("manual_progress", Number(e.target.value))
                 }
               />
-            </label>
+            </Field>
           )}
         </div>
         <label className="change-reason">
@@ -318,7 +318,7 @@ export function TaskUpdateCard({
           Update blocker / waiting reason
         </label>
         {Object.hasOwn(changes, "blocker_reason") && (
-          <label className="form-field">
+          <Field>
             Proposed blocker reason
             <textarea
               rows={2}
@@ -326,9 +326,9 @@ export function TaskUpdateCard({
               value={changes.blocker_reason ?? ""}
               onChange={(e) => field("blocker_reason", e.target.value)}
             />
-          </label>
+          </Field>
         )}
-        <label className="form-field">
+        <Field>
           Deadline action
           <select
             value={deadline}
@@ -338,10 +338,10 @@ export function TaskUpdateCard({
             <option value="set">Set an exact deadline</option>
             <option value="clear">Clear deadline</option>
           </select>
-        </label>
+        </Field>
         {deadline === "set" && (
           <>
-            <label className="form-field">
+            <Field>
               Exact due date & time <span>in {zone}</span>
               <input
                 type="datetime-local"
@@ -349,15 +349,15 @@ export function TaskUpdateCard({
                 value={due}
                 onChange={(e) => setDue(e.target.value)}
               />
-            </label>
-            <label className="form-field">
+            </Field>
+            <Field>
               Clock-change occurrence
               <select value={fold} onChange={(e) => setFold(e.target.value)}>
                 <option value="">Ask if this time occurs twice</option>
                 <option value="0">First occurrence</option>
                 <option value="1">Second occurrence</option>
               </select>
-            </label>
+            </Field>
           </>
         )}
       </fieldset>
@@ -370,14 +370,14 @@ export function TaskUpdateCard({
         >
           Reject update
         </button>
-        <button
+        <Button
+          variant="primary"
           type="submit"
-          className="primary-button"
           disabled={busy || stale || !Object.keys(preview).length}
         >
           <Check size={15} />
           {busy ? "Saving…" : "Approve changes"}
-        </button>
+        </Button>
       </div>
     </form>
   );

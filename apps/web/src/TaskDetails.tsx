@@ -16,6 +16,9 @@ import { dateLabel, timeLabel } from "./dates";
 import { Modal } from "./Modal";
 import { TaskWork } from "./TaskWork";
 import { TaskSchedule } from "./TaskSchedule";
+import { Banner } from "./ui/Banner";
+import { Button } from "./ui/Button";
+import { Field } from "./ui/Field";
 
 function eventValue(value: unknown): string {
   if (value === null || value === undefined) return "—";
@@ -100,11 +103,7 @@ export function TaskDetails({
       <div className="detail-content">
         <span className="category-chip">{task.category}</span>
         <h1>{task.title}</h1>
-        {mutationError && (
-          <p className="error-banner" role="alert">
-            {mutationError}
-          </p>
-        )}
+        {mutationError && <Banner as="p">{mutationError}</Banner>}
         <div className="detail-meta">
           <span className={`priority-badge ${task.priority}`}>
             <Flag size={13} />
@@ -115,7 +114,7 @@ export function TaskDetails({
             {dateLabel(task.due_at, zone)}
           </span>
         </div>
-        <label className="form-field">
+        <Field>
           Status
           <select
             value={task.status}
@@ -128,7 +127,7 @@ export function TaskDetails({
               </option>
             ))}
           </select>
-        </label>
+        </Field>
         <h3>Description</h3>
         <p className="detail-description">
           {task.description ||
@@ -146,29 +145,29 @@ export function TaskDetails({
           </div>
         )}
         <div className="detail-actions">
-          <button
-            className="primary-button"
+          <Button
+            variant="primary"
             onClick={onEdit}
             disabled={pending || workBusy}
           >
             Edit task <ArrowUpRight size={15} />
-          </button>
-          <button
-            className="secondary-button"
+          </Button>
+          <Button
+            variant="secondary"
             onClick={onAsk}
             disabled={pending || workBusy}
           >
             <Sparkles size={15} />
             Ask assistant
-          </button>
-          <button
-            className="secondary-button"
+          </Button>
+          <Button
+            variant="secondary"
             onClick={onArchive}
             disabled={pending || workBusy}
           >
             <Archive size={15} />
             {task.archived_at ? "Restore task" : "Archive"}
-          </button>
+          </Button>
         </div>
         {source && (
           <section className="source-panel">

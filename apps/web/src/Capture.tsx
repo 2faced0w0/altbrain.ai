@@ -5,6 +5,9 @@ import { useCaptureState } from "./useCaptureState";
 import { CaptureSidebar } from "./CaptureSidebar";
 import { CaptureProviderBar } from "./CaptureProviderBar";
 import { ConversationView } from "./ConversationView";
+import { Banner } from "./ui/Banner";
+import { Button } from "./ui/Button";
+import { EmptyState } from "./ui/EmptyState";
 
 export function Capture(props: CaptureProps) {
   const app = useCaptureState(props);
@@ -29,7 +32,7 @@ export function Capture(props: CaptureProps) {
       <section className="capture-main" aria-label="Capture assistant">
         <CaptureProviderBar app={app} />
         {error && (
-          <div className="error-banner" role="alert">
+          <Banner>
             <span>{error}</span>
             {retry.current && (
               <button
@@ -50,25 +53,25 @@ export function Capture(props: CaptureProps) {
                 Reload conversation
               </button>
             )}
-          </div>
+          </Banner>
         )}
         {loading ? (
-          <div className="empty-state">
+          <EmptyState>
             <h3>Opening saved capture…</h3>
-          </div>
+          </EmptyState>
         ) : !page ? (
-          <div className="empty-state">
+          <EmptyState>
             <Sparkles size={30} />
             <h2>Turn a request into a clear next step.</h2>
             <p>
               Start a conversation, paste a synthetic email or type a request,
               then review the proposed tasks.
             </p>
-            <button className="primary-button" disabled={busy} onClick={create}>
+            <Button variant="primary" disabled={busy} onClick={create}>
               <Plus size={16} />
               Start a capture
-            </button>
-          </div>
+            </Button>
+          </EmptyState>
         ) : (
           <ConversationView app={app} page={page} />
         )}

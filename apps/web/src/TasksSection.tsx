@@ -16,6 +16,8 @@ import { statuses, labels, isActive } from "./taskMeta";
 import { TaskCard } from "./TaskCard";
 import { TaskRow } from "./TaskRow";
 import type { TrackerApp } from "./useTrackerApp";
+import { Button } from "./ui/Button";
+import { EmptyState } from "./ui/EmptyState";
 
 export function TasksSection({ app }: { app: TrackerApp }) {
   const {
@@ -122,7 +124,7 @@ export function TasksSection({ app }: { app: TrackerApp }) {
         </div>
       )}
       {!filtered.length ? (
-        <div className="empty-state">
+        <EmptyState>
           <Leaf size={30} />
           <h2>
             {search || priority !== "all" || statusFilter !== "all"
@@ -137,8 +139,8 @@ export function TasksSection({ app }: { app: TrackerApp }) {
               : "Create a task when you’re ready. Small steps count."}
           </p>
           {route !== "archive" && (
-            <button
-              className="primary-button"
+            <Button
+              variant="primary"
               onClick={() => {
                 setCreateStatus("inbox");
                 setEditor("new");
@@ -146,9 +148,9 @@ export function TasksSection({ app }: { app: TrackerApp }) {
             >
               <Plus size={16} />
               Create a task
-            </button>
+            </Button>
           )}
-        </div>
+        </EmptyState>
       ) : listMode || route === "archive" || statusFilter === "cancelled" ? (
         <div className="task-list">
           {filtered.map((task) => (
@@ -186,11 +188,11 @@ export function TasksSection({ app }: { app: TrackerApp }) {
                 />
               ))}
             {!filtered.some(isActive) && (
-              <div className="empty-state compact">
+              <EmptyState className="compact">
                 <CheckCheck size={25} />
                 <h3>You’re all caught up.</h3>
                 <p>Take a moment to enjoy the breathing room.</p>
-              </div>
+              </EmptyState>
             )}
             <button
               className="panel-link"
@@ -281,16 +283,16 @@ export function TasksSection({ app }: { app: TrackerApp }) {
                   <span className="column-count">
                     {filtered.filter((t) => t.status === status).length}
                   </span>
-                  <button
+                  <Button
+                    variant="icon"
                     aria-label={`Add task to ${labels[status]}`}
-                    className="icon-button"
                     onClick={() => {
                       setCreateStatus(status);
                       setEditor("new");
                     }}
                   >
                     <Plus size={16} />
-                  </button>
+                  </Button>
                 </div>
                 <div className="column-cards">
                   {filtered

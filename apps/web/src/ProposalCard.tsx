@@ -2,6 +2,9 @@ import { useRef, useState } from "react";
 import { ArrowRight, Check, X } from "lucide-react";
 import * as api from "./api";
 import type { Proposal, Task, TaskCreate } from "./api";
+import { Banner } from "./ui/Banner";
+import { Button } from "./ui/Button";
+import { Field } from "./ui/Field";
 
 export function ProposalCard({
   proposal,
@@ -106,12 +109,12 @@ export function ProposalCard({
           </small>
         </span>
         {proposal.approved_task_id && (
-          <button
-            className="secondary-button"
+          <Button
+            variant="secondary"
             onClick={() => onOpenTask(proposal.approved_task_id!)}
           >
             Open task <ArrowRight size={14} />
-          </button>
+          </Button>
         )}
       </div>
     );
@@ -139,15 +142,15 @@ export function ProposalCard({
         </p>
       ))}
       {error && (
-        <p className="error-banner" role="alert">
+        <Banner as="p">
           {error} Your edits remain in this form. Reload the conversation to
           review the latest saved proposal.
-        </p>
+        </Banner>
       )}
       {saved && <p role="status">{saved}</p>}
       <fieldset disabled={busy}>
         <legend className="sr-only">Proposed task fields</legend>
-        <label className="form-field">
+        <Field>
           Proposed title
           <input
             name="title"
@@ -155,8 +158,8 @@ export function ProposalCard({
             required
             maxLength={200}
           />
-        </label>
-        <label className="form-field">
+        </Field>
+        <Field>
           Proposed description
           <textarea
             name="description"
@@ -164,9 +167,9 @@ export function ProposalCard({
             defaultValue={base.description}
             maxLength={10000}
           />
-        </label>
+        </Field>
         <div className="form-grid">
-          <label className="form-field">
+          <Field>
             Priority <span>neutral default; not inferred</span>
             <select name="priority" defaultValue={base.priority}>
               {["low", "medium", "high", "urgent"].map((value) => (
@@ -175,8 +178,8 @@ export function ProposalCard({
                 </option>
               ))}
             </select>
-          </label>
-          <label className="form-field">
+          </Field>
+          <Field>
             Initial status
             <select name="status" defaultValue={base.status}>
               {[
@@ -194,20 +197,20 @@ export function ProposalCard({
                 </option>
               ))}
             </select>
-          </label>
+          </Field>
         </div>
-        <label className="form-field">
+        <Field>
           Due date & time <span>in {zone}; leave blank for no deadline</span>
           <input name="due" type="datetime-local" defaultValue={dueValue} />
-        </label>
-        <label className="form-field">
+        </Field>
+        <Field>
           Clock-change occurrence
           <select name="fold" defaultValue="">
             <option value="">Ask if this time occurs twice</option>
             <option value="0">First occurrence</option>
             <option value="1">Second occurrence</option>
           </select>
-        </label>
+        </Field>
         <div className="proposal-actions">
           <button
             type="button"
@@ -216,20 +219,20 @@ export function ProposalCard({
           >
             Reject
           </button>
-          <button
+          <Button
+            variant="secondary"
             type="button"
-            className="secondary-button"
             onClick={(e) => {
               const form = e.currentTarget.form!;
               if (form.reportValidity()) void action(form, "save");
             }}
           >
             Save edits
-          </button>
-          <button type="submit" className="primary-button">
+          </Button>
+          <Button variant="primary" type="submit">
             <Check size={15} />
             {busy ? "Saving…" : "Approve task"}
-          </button>
+          </Button>
         </div>
       </fieldset>
     </form>

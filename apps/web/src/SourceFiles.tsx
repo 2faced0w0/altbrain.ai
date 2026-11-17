@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { SourceAsset, ConversationPage } from "./api";
 import * as api from "./api";
 import "./sources.css";
+import { Button } from "./ui/Button";
 
 const errors: Record<string, string> = {
   empty_text: "No readable text was found.",
@@ -86,13 +87,9 @@ export function SourceFiles({
             }
           }}
         />
-        <button
-          type="submit"
-          className="secondary-button"
-          disabled={busy || !file}
-        >
+        <Button variant="secondary" type="submit" disabled={busy || !file}>
           Upload privately
-        </button>
+        </Button>
       </form>
       {error && (
         <p role="alert" className="source-file-error">
@@ -126,29 +123,29 @@ export function SourceFiles({
             ) : (
               <>
                 <div className="source-file-actions">
-                  <button
-                    className="secondary-button"
+                  <Button
+                    variant="secondary"
                     disabled={busy || reading}
                     onClick={() => void read(asset)}
                   >
                     View extracted text
-                  </button>
-                  <button
-                    className="secondary-button"
+                  </Button>
+                  <Button
+                    variant="secondary"
                     disabled={busy || reading}
                     onClick={() => void read(asset, true)}
                   >
                     Download original
-                  </button>
-                  <button
-                    className="primary-button"
+                  </Button>
+                  <Button
+                    variant="primary"
                     disabled={busy || reviewed || !canReview}
                     onClick={() => onReview(asset)}
                   >
                     {reviewed
                       ? "Proposals saved below"
                       : "Review file proposals"}
-                  </button>
+                  </Button>
                 </div>
                 {preview?.id === asset.id && (
                   <details open>

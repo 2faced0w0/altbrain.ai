@@ -5,6 +5,9 @@ import type { Changes, Task, TaskCreate } from "./api";
 import { labels, Status } from "./taskMeta";
 import { localDay } from "./dates";
 import { Modal } from "./Modal";
+import { Banner } from "./ui/Banner";
+import { Button } from "./ui/Button";
+import { Field } from "./ui/Field";
 
 export function TaskEditor({
   task,
@@ -108,7 +111,7 @@ export function TaskEditor({
       <form onSubmit={save} className="task-form">
         <p className="form-intro">Give it a name. The next step will follow.</p>
         {error && (
-          <div className="error-banner" role="alert">
+          <Banner>
             {error}
             {task && (
               <button
@@ -120,9 +123,9 @@ export function TaskEditor({
                 Reload latest task (discard draft)
               </button>
             )}
-          </div>
+          </Banner>
         )}
-        <label className="form-field">
+        <Field>
           Task title
           <input
             name="title"
@@ -132,8 +135,8 @@ export function TaskEditor({
             placeholder="What would you like to work on?"
             defaultValue={task?.title}
           />
-        </label>
-        <label className="form-field">
+        </Field>
+        <Field>
           Description <span>optional</span>
           <textarea
             name="description"
@@ -142,9 +145,9 @@ export function TaskEditor({
             placeholder="A little context, a next step, or a useful detail…"
             defaultValue={task?.description}
           />
-        </label>
+        </Field>
         <div className="form-grid">
-          <label className="form-field">
+          <Field>
             Status
             <select name="status" defaultValue={task?.status || initialStatus}>
               {Object.entries(labels).map(([value, label]) => (
@@ -153,8 +156,8 @@ export function TaskEditor({
                 </option>
               ))}
             </select>
-          </label>
-          <label className="form-field">
+          </Field>
+          <Field>
             Priority
             <select name="priority" defaultValue={task?.priority || "medium"}>
               {["low", "medium", "high", "urgent"].map((value) => (
@@ -163,21 +166,21 @@ export function TaskEditor({
                 </option>
               ))}
             </select>
-          </label>
+          </Field>
         </div>
-        <label className="form-field">
+        <Field>
           Due date & time <span>in {zone}</span>
           <input type="datetime-local" name="due_at" defaultValue={dueValue} />
-        </label>
-        <label className="form-field">
+        </Field>
+        <Field>
           Clock-change occurrence
           <select name="fold" defaultValue="">
             <option value="">Ask if this time occurs twice</option>
             <option value="0">First occurrence</option>
             <option value="1">Second occurrence</option>
           </select>
-        </label>
-        <label className="form-field">
+        </Field>
+        <Field>
           Category
           <input
             name="category"
@@ -191,8 +194,8 @@ export function TaskEditor({
             <option>Operations</option>
             <option>Events</option>
           </datalist>
-        </label>
-        <label className="form-field">
+        </Field>
+        <Field>
           Blocker or waiting reason
           <textarea
             name="blocker_reason"
@@ -201,9 +204,9 @@ export function TaskEditor({
             defaultValue={task?.blocker_reason || ""}
             placeholder="What is holding this up?"
           />
-        </label>
+        </Field>
         <div className="form-grid">
-          <label className="form-field">
+          <Field>
             Progress source
             <select
               name="progress_mode"
@@ -212,8 +215,8 @@ export function TaskEditor({
               <option value="steps">From checklist</option>
               <option value="manual">Manual percentage</option>
             </select>
-          </label>
-          <label className="form-field">
+          </Field>
+          <Field>
             Manual progress (%)
             <input
               name="manual_progress"
@@ -223,29 +226,29 @@ export function TaskEditor({
               required
               defaultValue={task?.manual_progress || 0}
             />
-          </label>
+          </Field>
         </div>
         <p className="form-intro">
           Manual percentage is retained separately when checklist progress is
           selected.
         </p>
         <div className="form-actions">
-          <button
+          <Button
+            variant="secondary"
             type="button"
-            className="secondary-button"
             onClick={onClose}
             disabled={busy}
           >
             Cancel
-          </button>
-          <button type="submit" className="primary-button" disabled={busy}>
+          </Button>
+          <Button variant="primary" type="submit" disabled={busy}>
             {busy ? (
               <LoaderCircle className="spin" size={16} />
             ) : (
               <Check size={16} />
             )}{" "}
             {busy ? "Saving…" : task ? "Save changes" : "Create task"}
-          </button>
+          </Button>
         </div>
       </form>
     </Modal>
