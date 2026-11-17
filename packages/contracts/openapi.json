@@ -1,0 +1,3924 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AI Work Tracker",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/health": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health_api_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/dev/session": {
+      "post": {
+        "summary": "Local Session",
+        "operationId": "local_session_api_v1_dev_session_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me": {
+      "get": {
+        "summary": "Me",
+        "operationId": "me_api_v1_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeOut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/workspace/preferences": {
+      "patch": {
+        "summary": "Preferences",
+        "operationId": "preferences_api_v1_workspace_preferences_patch",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Preferences"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/workspace/resolve-deadline": {
+      "post": {
+        "summary": "Resolve Deadline",
+        "operationId": "resolve_deadline_api_v1_workspace_resolve_deadline_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WallDeadline"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResolvedDeadline"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/session": {
+      "get": {
+        "summary": "Status",
+        "operationId": "status_api_v1_auth_session_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthState"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login": {
+      "get": {
+        "summary": "Login",
+        "operationId": "login_api_v1_auth_login_get",
+        "parameters": [
+          {
+            "name": "return_path",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 500,
+              "default": "/app/today",
+              "title": "Return Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/callback": {
+      "get": {
+        "summary": "Oidc Callback",
+        "operationId": "oidc_callback_api_v1_auth_callback_get",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 4096,
+              "default": "",
+              "title": "Code"
+            }
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 100,
+              "default": "",
+              "title": "State"
+            }
+          },
+          {
+            "name": "error",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 100,
+              "default": "",
+              "title": "Error"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "summary": "Logout",
+        "operationId": "logout_api_v1_auth_logout_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogoutResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/invitations/redeem": {
+      "post": {
+        "summary": "Redeem",
+        "operationId": "redeem_api_v1_invitations_redeem_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Redeem"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tasks": {
+      "get": {
+        "summary": "Tasks",
+        "operationId": "tasks_api_v1_tasks_get",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "inbox",
+                    "planned",
+                    "in_progress",
+                    "waiting",
+                    "blocked",
+                    "in_review",
+                    "completed",
+                    "cancelled"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "name": "archived",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Archived"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 200,
+              "default": "",
+              "title": "Q"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 500,
+              "minimum": 1,
+              "default": 200,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskPage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Task",
+        "operationId": "create_task_api_v1_tasks_post",
+        "parameters": [
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 100,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tasks/{task_id}": {
+      "get": {
+        "summary": "Detail",
+        "operationId": "detail_api_v1_tasks__task_id__get",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Edit Task",
+        "operationId": "edit_task_api_v1_tasks__task_id__patch",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 100,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskPatch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tasks/{task_id}/events": {
+      "get": {
+        "summary": "Events",
+        "operationId": "events_api_v1_tasks__task_id__events_get",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EventOut"
+                  },
+                  "title": "Response Events Api V1 Tasks  Task Id  Events Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tasks/{task_id}/archive": {
+      "post": {
+        "summary": "Archive",
+        "operationId": "archive_api_v1_tasks__task_id__archive_post",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 100,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VersionBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tasks/{task_id}/restore": {
+      "post": {
+        "summary": "Restore",
+        "operationId": "restore_api_v1_tasks__task_id__restore_post",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 100,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VersionBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tasks/{task_id}/work": {
+      "get": {
+        "summary": "Work",
+        "operationId": "work_api_v1_tasks__task_id__work_get",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskWork"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tasks/{task_id}/steps": {
+      "post": {
+        "summary": "Add Step",
+        "operationId": "add_step_api_v1_tasks__task_id__steps_post",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 100,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StepWrite"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tasks/{task_id}/steps/{item_id}": {
+      "patch": {
+        "summary": "Edit Step",
+        "operationId": "edit_step_api_v1_tasks__task_id__steps__item_id__patch",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "item_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Item Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 100,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StepWrite"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tasks/{task_id}/deliverables": {
+      "post": {
+        "summary": "Add Deliverable",
+        "operationId": "add_deliverable_api_v1_tasks__task_id__deliverables_post",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 100,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeliverableWrite"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tasks/{task_id}/deliverables/{item_id}": {
+      "patch": {
+        "summary": "Edit Deliverable",
+        "operationId": "edit_deliverable_api_v1_tasks__task_id__deliverables__item_id__patch",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "item_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Item Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 100,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeliverableWrite"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tasks/{task_id}/notes": {
+      "post": {
+        "summary": "Add Note",
+        "operationId": "add_note_api_v1_tasks__task_id__notes_post",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 100,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NoteWrite"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tasks/{task_id}/reschedule": {
+      "post": {
+        "summary": "Reschedule",
+        "operationId": "reschedule_api_v1_tasks__task_id__reschedule_post",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 100,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Reschedule"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/status": {
+      "get": {
+        "summary": "Status",
+        "operationId": "status_api_v1_ai_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conversations": {
+      "get": {
+        "summary": "Conversations",
+        "operationId": "conversations_api_v1_conversations_get",
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ConversationOut"
+                  },
+                  "title": "Response Conversations Api V1 Conversations Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create",
+        "operationId": "create_api_v1_conversations_post",
+        "parameters": [
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 100,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConversationCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conversations/{conversation_id}": {
+      "get": {
+        "summary": "Detail",
+        "operationId": "detail_api_v1_conversations__conversation_id__get",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Conversation Id"
+            }
+          },
+          {
+            "name": "before_sequence",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Before Sequence"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationPage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conversations/{conversation_id}/draft": {
+      "patch": {
+        "summary": "Draft",
+        "operationId": "draft_api_v1_conversations__conversation_id__draft_patch",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Conversation Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 100,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DraftWrite"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conversations/{conversation_id}/runs": {
+      "post": {
+        "summary": "Capture",
+        "operationId": "capture_api_v1_conversations__conversation_id__runs_post",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Conversation Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 100,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaptureWrite"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CaptureResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/proposals/{proposal_id}": {
+      "patch": {
+        "summary": "Edit Proposal",
+        "operationId": "edit_proposal_api_v1_ai_proposals__proposal_id__patch",
+        "parameters": [
+          {
+            "name": "proposal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Proposal Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 100,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProposalEdit"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProposalOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/proposals/{proposal_id}/decision": {
+      "post": {
+        "summary": "Decision",
+        "operationId": "decision_api_v1_ai_proposals__proposal_id__decision_post",
+        "parameters": [
+          {
+            "name": "proposal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Proposal Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 100,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Decision"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DecisionResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tasks/{task_id}/source": {
+      "get": {
+        "summary": "Source",
+        "operationId": "source_api_v1_tasks__task_id__source_get",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/TaskSource"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Response Source Api V1 Tasks  Task Id  Source Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conversations/{conversation_id}/sources": {
+      "post": {
+        "summary": "Upload",
+        "operationId": "upload_api_v1_conversations__conversation_id__sources_post",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Conversation Id"
+            }
+          },
+          {
+            "name": "X-File-Name",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 720,
+              "title": "X-File-Name"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 100,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sources/{asset_id}": {
+      "get": {
+        "summary": "Detail",
+        "operationId": "detail_api_v1_sources__asset_id__get",
+        "parameters": [
+          {
+            "name": "asset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Asset Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceText"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sources/{asset_id}/download": {
+      "get": {
+        "summary": "Download",
+        "operationId": "download_api_v1_sources__asset_id__download_get",
+        "parameters": [
+          {
+            "name": "asset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Asset Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tasks/{task_id}/assistant": {
+      "post": {
+        "summary": "Open Assistant",
+        "operationId": "open_assistant_api_v1_tasks__task_id__assistant_post",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 100,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conversations/{conversation_id}/task-runs": {
+      "post": {
+        "summary": "Task Run",
+        "operationId": "task_run_api_v1_conversations__conversation_id__task_runs_post",
+        "parameters": [
+          {
+            "name": "conversation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Conversation Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 100,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaptureWrite"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskRunResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/task-updates/{proposal_id}/decision": {
+      "post": {
+        "summary": "Decide Update",
+        "operationId": "decide_update_api_v1_ai_task_updates__proposal_id__decision_post",
+        "parameters": [
+          {
+            "name": "proposal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Proposal Id"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 100,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskUpdateDecision"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskUpdateResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AIStatus": {
+        "properties": {
+          "default_provider": {
+            "type": "string",
+            "title": "Default Provider"
+          },
+          "providers": {
+            "items": {
+              "$ref": "#/components/schemas/ProviderState"
+            },
+            "type": "array",
+            "title": "Providers"
+          },
+          "day_utc": {
+            "type": "string",
+            "title": "Day Utc"
+          },
+          "requests_used": {
+            "type": "integer",
+            "title": "Requests Used"
+          },
+          "request_limit": {
+            "type": "integer",
+            "title": "Request Limit"
+          },
+          "reserved_micro_usd": {
+            "type": "integer",
+            "title": "Reserved Micro Usd"
+          },
+          "daily_limit_micro_usd": {
+            "type": "integer",
+            "title": "Daily Limit Micro Usd"
+          }
+        },
+        "type": "object",
+        "required": [
+          "default_provider",
+          "providers",
+          "day_utc",
+          "requests_used",
+          "request_limit",
+          "reserved_micro_usd",
+          "daily_limit_micro_usd"
+        ],
+        "title": "AIStatus"
+      },
+      "AuthState": {
+        "properties": {
+          "mode": {
+            "type": "string",
+            "title": "Mode"
+          },
+          "authenticated": {
+            "type": "boolean",
+            "title": "Authenticated",
+            "default": false
+          },
+          "has_workspace": {
+            "type": "boolean",
+            "title": "Has Workspace",
+            "default": false
+          },
+          "email": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Email"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "csrf_token": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Csrf Token"
+          },
+          "expires_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expires At"
+          },
+          "login_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Login Url"
+          },
+          "local_mail_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Local Mail Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mode"
+        ],
+        "title": "AuthState"
+      },
+      "Candidate": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Title"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 10000,
+            "title": "Description",
+            "default": ""
+          },
+          "evidence": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 1,
+            "title": "Evidence"
+          },
+          "questions": {
+            "items": {
+              "type": "string",
+              "maxLength": 500
+            },
+            "type": "array",
+            "maxItems": 8,
+            "title": "Questions"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "title",
+          "evidence"
+        ],
+        "title": "Candidate"
+      },
+      "CaptureResult": {
+        "properties": {
+          "conversation": {
+            "$ref": "#/components/schemas/ConversationOut"
+          },
+          "run": {
+            "$ref": "#/components/schemas/RunOut"
+          },
+          "proposals": {
+            "items": {
+              "$ref": "#/components/schemas/ProposalOut"
+            },
+            "type": "array",
+            "title": "Proposals"
+          }
+        },
+        "type": "object",
+        "required": [
+          "conversation",
+          "run",
+          "proposals"
+        ],
+        "title": "CaptureResult"
+      },
+      "CaptureWrite": {
+        "properties": {
+          "expected_version": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Version"
+          },
+          "content": {
+            "type": "string",
+            "maxLength": 20000,
+            "title": "Content",
+            "default": ""
+          },
+          "asset_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 36,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Asset Id"
+          },
+          "provider": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "mock",
+                  "openai",
+                  "gemini",
+                  "mistral",
+                  "grok",
+                  "openrouter",
+                  "deepseek"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider"
+          },
+          "live_consent": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Live Consent"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_version"
+        ],
+        "title": "CaptureWrite"
+      },
+      "ConversationCreate": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Title",
+            "default": "New capture"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ConversationCreate"
+      },
+      "ConversationOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "draft": {
+            "type": "string",
+            "title": "Draft"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "title": "Updated At"
+          },
+          "task_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Task Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "draft",
+          "version",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "ConversationOut"
+      },
+      "ConversationPage": {
+        "properties": {
+          "conversation": {
+            "$ref": "#/components/schemas/ConversationOut"
+          },
+          "messages": {
+            "items": {
+              "$ref": "#/components/schemas/MessageOut"
+            },
+            "type": "array",
+            "title": "Messages"
+          },
+          "runs": {
+            "items": {
+              "$ref": "#/components/schemas/RunOut"
+            },
+            "type": "array",
+            "title": "Runs"
+          },
+          "proposals": {
+            "items": {
+              "$ref": "#/components/schemas/ProposalOut"
+            },
+            "type": "array",
+            "title": "Proposals"
+          },
+          "has_older": {
+            "type": "boolean",
+            "title": "Has Older"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/SourceOut"
+            },
+            "type": "array",
+            "title": "Sources"
+          },
+          "task": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TaskOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "updates": {
+            "items": {
+              "$ref": "#/components/schemas/TaskUpdateOut"
+            },
+            "type": "array",
+            "title": "Updates"
+          }
+        },
+        "type": "object",
+        "required": [
+          "conversation",
+          "messages",
+          "runs",
+          "proposals",
+          "has_older"
+        ],
+        "title": "ConversationPage"
+      },
+      "Decision": {
+        "properties": {
+          "expected_version": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Version"
+          },
+          "decision": {
+            "type": "string",
+            "enum": [
+              "approve",
+              "reject"
+            ],
+            "title": "Decision"
+          },
+          "task": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TaskCreate"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_version",
+          "decision"
+        ],
+        "title": "Decision"
+      },
+      "DecisionResult": {
+        "properties": {
+          "proposal": {
+            "$ref": "#/components/schemas/ProposalOut"
+          },
+          "commit": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TaskResult"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "proposal"
+        ],
+        "title": "DecisionResult"
+      },
+      "DeliverableOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "ready"
+            ],
+            "title": "State"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "description",
+          "state",
+          "created_at"
+        ],
+        "title": "DeliverableOut"
+      },
+      "DeliverableWrite": {
+        "properties": {
+          "expected_version": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Version"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 1,
+            "title": "Description"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "ready"
+            ],
+            "title": "State",
+            "default": "pending"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_version",
+          "description"
+        ],
+        "title": "DeliverableWrite"
+      },
+      "DraftWrite": {
+        "properties": {
+          "expected_version": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Version"
+          },
+          "draft": {
+            "type": "string",
+            "maxLength": 20000,
+            "title": "Draft"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_version",
+          "draft"
+        ],
+        "title": "DraftWrite"
+      },
+      "EventOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "task_id": {
+            "type": "string",
+            "title": "Task Id"
+          },
+          "event_type": {
+            "type": "string",
+            "title": "Event Type"
+          },
+          "occurred_at": {
+            "type": "string",
+            "title": "Occurred At"
+          },
+          "changes": {
+            "type": "object",
+            "title": "Changes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "task_id",
+          "event_type",
+          "occurred_at",
+          "changes"
+        ],
+        "title": "EventOut"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "LogoutResult": {
+        "properties": {
+          "redirect_url": {
+            "type": "string",
+            "title": "Redirect Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "redirect_url"
+        ],
+        "title": "LogoutResult"
+      },
+      "MeOut": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "timezone": {
+            "type": "string",
+            "title": "Timezone"
+          },
+          "workspace_name": {
+            "type": "string",
+            "title": "Workspace Name"
+          },
+          "local_identity": {
+            "type": "boolean",
+            "title": "Local Identity"
+          },
+          "local_environment": {
+            "type": "boolean",
+            "title": "Local Environment",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "email",
+          "timezone",
+          "workspace_name",
+          "local_identity"
+        ],
+        "title": "MeOut"
+      },
+      "MessageOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "sequence": {
+            "type": "integer",
+            "title": "Sequence"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "user",
+              "assistant"
+            ],
+            "title": "Role"
+          },
+          "content": {
+            "type": "string",
+            "title": "Content"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "sequence",
+          "role",
+          "content",
+          "created_at"
+        ],
+        "title": "MessageOut"
+      },
+      "NoteOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "content": {
+            "type": "string",
+            "title": "Content"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "content",
+          "created_at"
+        ],
+        "title": "NoteOut"
+      },
+      "NoteWrite": {
+        "properties": {
+          "expected_version": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Version"
+          },
+          "content": {
+            "type": "string",
+            "maxLength": 10000,
+            "minLength": 1,
+            "title": "Content"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_version",
+          "content"
+        ],
+        "title": "NoteWrite"
+      },
+      "Preferences": {
+        "properties": {
+          "timezone": {
+            "type": "string",
+            "title": "Timezone"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "timezone"
+        ],
+        "title": "Preferences"
+      },
+      "ProposalEdit": {
+        "properties": {
+          "expected_version": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Version"
+          },
+          "task": {
+            "$ref": "#/components/schemas/TaskCreate"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_version",
+          "task"
+        ],
+        "title": "ProposalEdit"
+      },
+      "ProposalOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "run_id": {
+            "type": "string",
+            "title": "Run Id"
+          },
+          "position": {
+            "type": "integer",
+            "title": "Position"
+          },
+          "candidate": {
+            "$ref": "#/components/schemas/Candidate"
+          },
+          "draft_task": {
+            "$ref": "#/components/schemas/TaskCreate"
+          },
+          "review_state": {
+            "type": "string",
+            "enum": [
+              "ready_for_review",
+              "approved",
+              "rejected"
+            ],
+            "title": "Review State"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "approved_task_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Approved Task Id"
+          },
+          "reviewed_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reviewed At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "run_id",
+          "position",
+          "candidate",
+          "draft_task",
+          "review_state",
+          "version",
+          "approved_task_id",
+          "reviewed_at"
+        ],
+        "title": "ProposalOut"
+      },
+      "ProviderState": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "model": {
+            "type": "string",
+            "title": "Model"
+          },
+          "ready": {
+            "type": "boolean",
+            "title": "Ready"
+          },
+          "external": {
+            "type": "boolean",
+            "title": "External"
+          },
+          "upstream": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Upstream"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "model",
+          "ready",
+          "external"
+        ],
+        "title": "ProviderState"
+      },
+      "Redeem": {
+        "properties": {
+          "token": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 16,
+            "title": "Token"
+          },
+          "timezone": {
+            "type": "string",
+            "title": "Timezone",
+            "default": "Asia/Kolkata"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "token"
+        ],
+        "title": "Redeem"
+      },
+      "Reschedule": {
+        "properties": {
+          "expected_version": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Version"
+          },
+          "local_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Local Date"
+          },
+          "local_time": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Local Time"
+          },
+          "fold": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "enum": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fold"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_version",
+          "local_date"
+        ],
+        "title": "Reschedule"
+      },
+      "ResolvedDeadline": {
+        "properties": {
+          "due_at": {
+            "type": "string",
+            "title": "Due At"
+          },
+          "timezone": {
+            "type": "string",
+            "title": "Timezone"
+          }
+        },
+        "type": "object",
+        "required": [
+          "due_at",
+          "timezone"
+        ],
+        "title": "ResolvedDeadline"
+      },
+      "RunOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "conversation_id": {
+            "type": "string",
+            "title": "Conversation Id"
+          },
+          "source_message_id": {
+            "type": "string",
+            "title": "Source Message Id"
+          },
+          "source_asset_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Asset Id"
+          },
+          "provider": {
+            "type": "string",
+            "title": "Provider"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model"
+          },
+          "upstream": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Upstream"
+          },
+          "input_tokens": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Input Tokens"
+          },
+          "output_tokens": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Output Tokens"
+          },
+          "reserved_micro_usd": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reserved Micro Usd"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "completed",
+              "failed"
+            ],
+            "title": "State"
+          },
+          "error_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Code"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "conversation_id",
+          "source_message_id",
+          "provider",
+          "state",
+          "error_code",
+          "created_at"
+        ],
+        "title": "RunOut"
+      },
+      "SourceOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "conversation_id": {
+            "type": "string",
+            "title": "Conversation Id"
+          },
+          "filename": {
+            "type": "string",
+            "title": "Filename"
+          },
+          "media_type": {
+            "type": "string",
+            "title": "Media Type"
+          },
+          "byte_size": {
+            "type": "integer",
+            "title": "Byte Size"
+          },
+          "content_hash": {
+            "type": "string",
+            "title": "Content Hash"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "ready",
+              "failed"
+            ],
+            "title": "State"
+          },
+          "error_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Code"
+          },
+          "text_hash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text Hash"
+          },
+          "extractor": {
+            "type": "string",
+            "title": "Extractor"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "conversation_id",
+          "filename",
+          "media_type",
+          "byte_size",
+          "content_hash",
+          "state",
+          "error_code",
+          "text_hash",
+          "extractor",
+          "created_at"
+        ],
+        "title": "SourceOut"
+      },
+      "SourceText": {
+        "properties": {
+          "asset": {
+            "$ref": "#/components/schemas/SourceOut"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          }
+        },
+        "type": "object",
+        "required": [
+          "asset",
+          "text"
+        ],
+        "title": "SourceText"
+      },
+      "StepOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "position": {
+            "type": "integer",
+            "title": "Position"
+          },
+          "checked": {
+            "type": "boolean",
+            "title": "Checked"
+          },
+          "checked_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Checked At"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "text",
+          "position",
+          "checked",
+          "checked_at",
+          "created_at"
+        ],
+        "title": "StepOut"
+      },
+      "StepWrite": {
+        "properties": {
+          "expected_version": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Version"
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Text"
+          },
+          "checked": {
+            "type": "boolean",
+            "title": "Checked",
+            "default": false
+          },
+          "position": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 10000.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Position"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_version",
+          "text"
+        ],
+        "title": "StepWrite"
+      },
+      "TaskChanges": {
+        "properties": {
+          "blocker_reason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Blocker Reason"
+          },
+          "progress_mode": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "steps",
+                  "manual"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Progress Mode"
+          },
+          "manual_progress": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 100.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Manual Progress"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 10000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "category": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 60,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Category"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "inbox",
+                  "planned",
+                  "in_progress",
+                  "waiting",
+                  "blocked",
+                  "in_review",
+                  "completed",
+                  "cancelled"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          },
+          "priority": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "low",
+                  "medium",
+                  "high",
+                  "urgent"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Priority"
+          },
+          "due_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Due At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "TaskChanges"
+      },
+      "TaskCreate": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Title"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 10000,
+            "title": "Description",
+            "default": ""
+          },
+          "category": {
+            "type": "string",
+            "maxLength": 60,
+            "minLength": 1,
+            "title": "Category",
+            "default": "General"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "inbox",
+              "planned",
+              "in_progress",
+              "waiting",
+              "blocked",
+              "in_review",
+              "completed",
+              "cancelled"
+            ],
+            "title": "Status",
+            "default": "inbox"
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high",
+              "urgent"
+            ],
+            "title": "Priority",
+            "default": "medium"
+          },
+          "due_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Due At"
+          },
+          "blocker_reason": {
+            "type": "string",
+            "maxLength": 2000,
+            "title": "Blocker Reason",
+            "default": ""
+          },
+          "progress_mode": {
+            "type": "string",
+            "enum": [
+              "steps",
+              "manual"
+            ],
+            "title": "Progress Mode",
+            "default": "steps"
+          },
+          "manual_progress": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Manual Progress",
+            "default": 0
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "title": "TaskCreate"
+      },
+      "TaskOut": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Title"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 10000,
+            "title": "Description",
+            "default": ""
+          },
+          "category": {
+            "type": "string",
+            "maxLength": 60,
+            "minLength": 1,
+            "title": "Category",
+            "default": "General"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "inbox",
+              "planned",
+              "in_progress",
+              "waiting",
+              "blocked",
+              "in_review",
+              "completed",
+              "cancelled"
+            ],
+            "title": "Status",
+            "default": "inbox"
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high",
+              "urgent"
+            ],
+            "title": "Priority",
+            "default": "medium"
+          },
+          "due_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Due At"
+          },
+          "blocker_reason": {
+            "type": "string",
+            "maxLength": 2000,
+            "title": "Blocker Reason",
+            "default": ""
+          },
+          "progress_mode": {
+            "type": "string",
+            "enum": [
+              "steps",
+              "manual"
+            ],
+            "title": "Progress Mode",
+            "default": "steps"
+          },
+          "manual_progress": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Manual Progress",
+            "default": 0
+          },
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "title": "Updated At"
+          },
+          "completed_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completed At"
+          },
+          "archived_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Archived At"
+          },
+          "step_progress": {
+            "type": "integer",
+            "title": "Step Progress"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "title",
+          "id",
+          "version",
+          "created_at",
+          "updated_at",
+          "completed_at",
+          "archived_at",
+          "step_progress"
+        ],
+        "title": "TaskOut"
+      },
+      "TaskPage": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/TaskOut"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total"
+        ],
+        "title": "TaskPage"
+      },
+      "TaskPatch": {
+        "properties": {
+          "expected_version": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Version"
+          },
+          "changes": {
+            "$ref": "#/components/schemas/TaskChanges"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_version",
+          "changes"
+        ],
+        "title": "TaskPatch"
+      },
+      "TaskResult": {
+        "properties": {
+          "task": {
+            "$ref": "#/components/schemas/TaskOut"
+          },
+          "event": {
+            "$ref": "#/components/schemas/EventOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "task",
+          "event"
+        ],
+        "title": "TaskResult"
+      },
+      "TaskRunResult": {
+        "properties": {
+          "conversation": {
+            "$ref": "#/components/schemas/ConversationOut"
+          },
+          "run": {
+            "$ref": "#/components/schemas/RunOut"
+          },
+          "updates": {
+            "items": {
+              "$ref": "#/components/schemas/TaskUpdateOut"
+            },
+            "type": "array",
+            "title": "Updates"
+          }
+        },
+        "type": "object",
+        "required": [
+          "conversation",
+          "run",
+          "updates"
+        ],
+        "title": "TaskRunResult"
+      },
+      "TaskSource": {
+        "properties": {
+          "asset": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SourceOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "conversation_id": {
+            "type": "string",
+            "title": "Conversation Id"
+          },
+          "message_id": {
+            "type": "string",
+            "title": "Message Id"
+          },
+          "proposal_id": {
+            "type": "string",
+            "title": "Proposal Id"
+          },
+          "provider": {
+            "type": "string",
+            "title": "Provider"
+          },
+          "evidence": {
+            "type": "string",
+            "title": "Evidence"
+          }
+        },
+        "type": "object",
+        "required": [
+          "conversation_id",
+          "message_id",
+          "proposal_id",
+          "provider",
+          "evidence"
+        ],
+        "title": "TaskSource"
+      },
+      "TaskUpdateDecision": {
+        "properties": {
+          "expected_version": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Version"
+          },
+          "decision": {
+            "type": "string",
+            "enum": [
+              "approve",
+              "reject"
+            ],
+            "title": "Decision"
+          },
+          "changes": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TaskChanges"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_version",
+          "decision"
+        ],
+        "title": "TaskUpdateDecision"
+      },
+      "TaskUpdateOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "run_id": {
+            "type": "string",
+            "title": "Run Id"
+          },
+          "task_id": {
+            "type": "string",
+            "title": "Task Id"
+          },
+          "base_version": {
+            "type": "integer",
+            "title": "Base Version"
+          },
+          "before_state": {
+            "type": "object",
+            "title": "Before State"
+          },
+          "proposed_changes": {
+            "$ref": "#/components/schemas/TaskChanges"
+          },
+          "evidence": {
+            "type": "string",
+            "title": "Evidence"
+          },
+          "questions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Questions"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "review_state": {
+            "type": "string",
+            "enum": [
+              "ready_for_review",
+              "approved",
+              "rejected"
+            ],
+            "title": "Review State"
+          },
+          "approved_changes": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TaskChanges"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reviewed_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reviewed At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "run_id",
+          "task_id",
+          "base_version",
+          "before_state",
+          "proposed_changes",
+          "evidence",
+          "questions",
+          "version",
+          "review_state",
+          "approved_changes",
+          "reviewed_at"
+        ],
+        "title": "TaskUpdateOut"
+      },
+      "TaskUpdateResult": {
+        "properties": {
+          "proposal": {
+            "$ref": "#/components/schemas/TaskUpdateOut"
+          },
+          "commit": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TaskResult"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "proposal"
+        ],
+        "title": "TaskUpdateResult"
+      },
+      "TaskWork": {
+        "properties": {
+          "steps": {
+            "items": {
+              "$ref": "#/components/schemas/StepOut"
+            },
+            "type": "array",
+            "title": "Steps"
+          },
+          "deliverables": {
+            "items": {
+              "$ref": "#/components/schemas/DeliverableOut"
+            },
+            "type": "array",
+            "title": "Deliverables"
+          },
+          "notes": {
+            "items": {
+              "$ref": "#/components/schemas/NoteOut"
+            },
+            "type": "array",
+            "title": "Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "steps",
+          "deliverables",
+          "notes"
+        ],
+        "title": "TaskWork"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "VersionBody": {
+        "properties": {
+          "expected_version": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Version"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_version"
+        ],
+        "title": "VersionBody"
+      },
+      "WallDeadline": {
+        "properties": {
+          "local_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Local Date"
+          },
+          "local_time": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Local Time"
+          },
+          "fold": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "enum": [
+                  0,
+                  1
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fold"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "local_date"
+        ],
+        "title": "WallDeadline"
+      }
+    }
+  }
+}

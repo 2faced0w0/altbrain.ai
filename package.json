@@ -1,0 +1,21 @@
+{
+  "name": "alt-brain-work-tracker",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/web"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace apps/web",
+    "build": "npm run build --workspace apps/web",
+    "typecheck": "npm run typecheck --workspace apps/web",
+    "contracts": "python scripts/generate_contracts.py && openapi-typescript packages/contracts/openapi.json -o apps/web/src/schema.d.ts",
+    "test:e2e": "playwright test",
+    "format": "prettier --write apps/web/src/*.tsx apps/web/src/api.ts"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.56.1",
+    "openapi-typescript": "7.10.1",
+    "prettier": "3.6.2"
+  }
+}

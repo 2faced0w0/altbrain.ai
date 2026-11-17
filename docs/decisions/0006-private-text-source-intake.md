@@ -1,0 +1,17 @@
+# Private bounded text-source intake
+
+Status: implemented locally, 26 October 2026.
+
+This slice accepts only UTF-8 TXT, Markdown and single-body plain-text EML, up to 256 KB. Streaming counts actual bytes and rejects oversized/chunked payloads before storage. Declared MIME must agree with the extension or be generic binary; common binary signatures, invalid UTF-8 and control bytes are rejected. Display names are sanitized and never used as filesystem paths. No uploaded text is rendered as HTML, executed, passed to a shell or treated as application instructions.
+
+EML parsing reads headers only first and permits a single text/plain body with supported transfer encoding/UTF-8 or ASCII. HTML, multipart messages and attachments remain unsupported; the parser does not recurse into MIME trees or follow remote content. Text is limited to 20,000 characters without silent truncation. An empty, too-long or unsupported email produces a visible failed asset, no proposals, and a quarantined original that cannot be downloaded.
+
+For this bounded local development build, private originals and extraction live transactionally in PostgreSQL (or optional SQLite) rather than provisioning an object store. This deliberate local adapter keeps original storage and retry receipt atomic. It is not a production object-storage implementation. Originals are deferred binary columns and never included in metadata responses, public URLs, static routes or provider requests. Authenticated downloads derive ownership from the server session, use attachment/octet-stream, no-store, nosniff and sandbox headers. No signed URLs or external processors were introduced.
+
+A workspace row lock serializes PostgreSQL quota/dedup checks. Database uniqueness also protects identical content/name within a conversation. Limits are 20 assets per conversation and 100 per workspace, bounding original storage to 25 MiB per workspace. Same-key retries replay exact results; repeated identical uploads reuse cached extraction. Hashes cover originals and extracted text. Failed uploads before validation/transaction commit leave no source rows.
+
+Sources belong to a fixed workspace/conversation. Composite run links enforce both boundaries. File requests submit only an asset ID; the server loads stored text and rejects caller-supplied replacement content or foreign assets. Runs persist source linkage and literal evidence; task approval includes file provenance in immutable activity. Existing task creation/review/version/idempotency safeguards remain intact. File intake is deliberately absent from task-scoped assistance to preserve its selected-task context. File preparation never changes a task or overwrites a separate typed draft.
+
+Small text parsing runs inline under strict bounds. Isolated/background parsers, scanning for richer formats, private S3-compatible storage, production at-rest encryption/backup, explicit retention/deletion including derived messages/proposals and signed expiring download grants remain release gates. There is no claim of general antivirus coverage or external beta readiness. Live AI remains disabled.
+
+Implementation references consulted: Starlette request streaming (https://www.starlette.io/requests/) and Python email message semantics (https://docs.python.org/3/library/email.message.html). Only APIs available in the installed pinned runtime were used; no new dependencies were introduced.
