@@ -87,6 +87,231 @@ def throttle(app, request, bucket, limit=10):
         )
 
 
+def valid_return_path(path):
+    if not path.startswith("/app/") or "\\" in path:
+        return False
+    parts = urlsplit(path)
+    return not parts.scheme and not parts.netloc and all(ord(c) >= 32 for c in path)
+
+
+def pkce_challenge(verifier):
+    return (
+        base64.urlsafe_b64encode(hashlib.sha256(verifier.encode()).digest())
+        .rstrip(b"=")
+        .decode()
+    )
+
+
+def authorization_url(settings, endpoint, callback, state, nonce, challenge):
+    return (
+        endpoint
+        + "auth?"
+        + urlencode(
+            {
+                "client_id": settings.oidc_client_id,
+                "response_type": "code",
+                "scope": "openid email profile",
+                "redirect_uri": callback,
+                "state": state,
+                "nonce": nonce,
+                "code_challenge": challenge,
+                "code_challenge_method": "S256",
+            }
+        )
+    )
+
+
+def logout_url(settings, endpoint):
+    return (
+        endpoint
+        + "logout?"
+        + urlencode(
+            {
+                "client_id": settings.oidc_client_id,
+                "post_logout_redirect_uri": settings.app_origin
+                + "/app/today?logged_out=1",
+            }
+        )
+    )
+
+
+def session_state(settings, session, request):
+    mode = (
+        "local"
+        if settings.local_identity
+        else "oidc"
+        if settings.browser_auth
+        else "unavailable"
+    )
+    result = AuthState(
+        mode=mode,
+        login_url="/api/v1/auth/login" if mode == "oidc" else None,
+        local_mail_url="http://127.0.0.1:8025"
+        if mode == "oidc" and settings.environment == "local"
+        else None,
+    )
+    row = cookie_session(request)
+    if not row:
+        return result
+    user = session.scalar(select(User).where(User.subject == row.claims["sub"]))
+    if user and not user.active:
+        return result
+    membership = (
+        session.scalar(
+            select(Membership)
+            .join(Workspace, Workspace.id == Membership.workspace_id)
+            .where(
+                Membership.user_id == user.id,
+                Workspace.owner_user_id == user.id,
+                Membership.role == "owner",
+            )
+        )
+        if user
+        else None
+    )
+    return result.model_copy(
+        update={
+            "authenticated": True,
+            "has_workspace": bool(membership),
+            "email": row.claims["email"],
+            "name": row.claims.get("name", "Workspace owner"),
+            "csrf_token": row.csrf_token,
+            "expires_at": row.expires_at,
+        }
+    )
+
+
+def store_login_transaction(session, old_browser, return_path):
+    """Replace this browser's pending sign-in; return (state, browser, verifier, nonce)."""
+    state, browser, verifier, nonce = [secrets.token_urlsafe(40) for _ in range(4)]
+    session.execute(
+        delete(LoginTransaction).where(LoginTransaction.expires_at <= now())
+    )
+    session.execute(delete(BrowserSession).where(BrowserSession.expires_at <= now()))
+    if old_browser:
+        session.execute(
+            delete(LoginTransaction).where(
+                LoginTransaction.browser_hash == digest(old_browser)
+            )
+        )
+    session.add(
+        LoginTransaction(
+            state_hash=digest(state),
+            browser_hash=digest(browser),
+            verifier=verifier,
+            nonce=nonce,
+            return_path=return_path,
+            expires_at=expires(600),
+        )
+    )
+    session.commit()
+    return state, browser, verifier, nonce
+
+
+def consume_login_transaction(session, state, browser):
+    """Validate and one-use delete the pending sign-in; None when it is not valid."""
+    row = session.get(LoginTransaction, digest(state)) if state else None
+    if (
+        not row
+        or row.expires_at <= now()
+        or not browser
+        or not secrets.compare_digest(row.browser_hash, digest(browser))
+    ):
+        return None
+    result = (row.verifier, row.nonce, row.return_path)
+    consumed = session.execute(
+        delete(LoginTransaction).where(
+            LoginTransaction.state_hash == row.state_hash,
+            LoginTransaction.expires_at > now(),
+        )
+    )
+    session.commit()
+    return result if consumed.rowcount == 1 else None
+
+
+def exchange_code(settings, endpoint, transport, callback, code, verifier):
+    with httpx.Client(
+        timeout=10, follow_redirects=False, transport=transport
+    ) as client:
+        token_response = client.post(
+            endpoint + "token",
+            auth=(settings.oidc_client_id, settings.oidc_client_secret),
+            data={
+                "grant_type": "authorization_code",
+                "code": code,
+                "redirect_uri": callback,
+                "code_verifier": verifier,
+            },
+        )
+    token_response.raise_for_status()
+    payload = token_response.json()
+    if not isinstance(payload, dict):
+        raise ValueError()
+    id_token = payload.get("id_token", "")
+    if not isinstance(id_token, str) or len(id_token) > 20000:
+        raise ValueError()
+    return id_token
+
+
+def verify_id_token(jwks, settings, id_token, nonce):
+    """Return (verified claims, canonical identity); raise on any invalid token."""
+    key = jwks.get_signing_key_from_jwt(id_token)
+    claims = jwt.decode(
+        id_token,
+        key.key,
+        algorithms=["RS256"],
+        audience=settings.oidc_client_id,
+        issuer=settings.oidc_issuer,
+        options={"require": ["exp", "iat", "sub", "email", "nonce"]},
+    )
+    if (
+        claims.get("nonce") != nonce
+        or claims.get("email_verified") is not True
+        or not isinstance(claims.get("sub"), str)
+        or len(claims["sub"]) > 250
+        or not isinstance(claims.get("email"), str)
+        or len(claims["email"]) > 320
+        or "@" not in claims["email"]
+    ):
+        raise ValueError()
+    audience = claims.get("aud")
+    if (
+        isinstance(audience, list) and len(audience) > 1 or "azp" in claims
+    ) and claims.get("azp") != settings.oidc_client_id:
+        raise ValueError()
+    canonical = {
+        "sub": subject_key(settings.oidc_issuer, claims["sub"]),
+        "email": claims["email"].lower(),
+        "email_verified": True,
+        "name": str(claims.get("name") or "Workspace owner")[:100],
+    }
+    return claims, canonical
+
+
+def create_browser_session(session, settings, old_token, claims, canonical):
+    """Rotate the opaque session; return (cookie token, expiry datetime)."""
+    token = secrets.token_urlsafe(40)
+    if old_token:
+        session.execute(
+            delete(BrowserSession).where(BrowserSession.token_hash == digest(old_token))
+        )
+    expiry = min(
+        datetime.fromtimestamp(claims["exp"], timezone.utc),
+        datetime.now(timezone.utc) + timedelta(hours=1),
+    )
+    session.add(
+        BrowserSession(
+            token_hash=digest(token),
+            issuer=settings.oidc_issuer,
+            claims=canonical,
+            csrf_token=secrets.token_urlsafe(32),
+            expires_at=expiry.isoformat(),
+        )
+    )
+    session.commit()
+    return token, expiry
+
+
 def install_browser_auth(app, db):
     settings = app.state.settings
     app.state.oidc_jwks = (
@@ -120,49 +345,7 @@ def install_browser_auth(app, db):
 
     @app.get("/api/v1/auth/session", response_model=AuthState)
     def status(request: Request, session: Session = Depends(db)):
-        mode = (
-            "local"
-            if settings.local_identity
-            else "oidc"
-            if settings.browser_auth
-            else "unavailable"
-        )
-        result = AuthState(
-            mode=mode,
-            login_url="/api/v1/auth/login" if mode == "oidc" else None,
-            local_mail_url="http://127.0.0.1:8025"
-            if mode == "oidc" and settings.environment == "local"
-            else None,
-        )
-        row = cookie_session(request)
-        if not row:
-            return result
-        user = session.scalar(select(User).where(User.subject == row.claims["sub"]))
-        if user and not user.active:
-            return result
-        membership = (
-            session.scalar(
-                select(Membership)
-                .join(Workspace, Workspace.id == Membership.workspace_id)
-                .where(
-                    Membership.user_id == user.id,
-                    Workspace.owner_user_id == user.id,
-                    Membership.role == "owner",
-                )
-            )
-            if user
-            else None
-        )
-        return result.model_copy(
-            update={
-                "authenticated": True,
-                "has_workspace": bool(membership),
-                "email": row.claims["email"],
-                "name": row.claims.get("name", "Workspace owner"),
-                "csrf_token": row.csrf_token,
-                "expires_at": row.expires_at,
-            }
-        )
+        return session_state(settings, session, request)
 
     @app.get("/api/v1/auth/login")
     def login(
@@ -172,59 +355,15 @@ def install_browser_auth(app, db):
     ):
         if not settings.browser_auth:
             raise HTTPException(503, "Browser sign-in is not configured")
-        if (
-            not return_path.startswith("/app/")
-            or "\\" in return_path
-            or urlsplit(return_path).scheme
-            or urlsplit(return_path).netloc
-            or any(ord(c) < 32 for c in return_path)
-        ):
+        if not valid_return_path(return_path):
             raise HTTPException(422, "Choose a workspace return path")
         throttle(app, request, "login", 30)
-        state, browser, verifier, nonce = [secrets.token_urlsafe(40) for _ in range(4)]
-        session.execute(
-            delete(LoginTransaction).where(LoginTransaction.expires_at <= now())
-        )
-        session.execute(
-            delete(BrowserSession).where(BrowserSession.expires_at <= now())
-        )
-        old_browser = request.cookies.get("workroom_login", "")
-        if old_browser:
-            session.execute(
-                delete(LoginTransaction).where(
-                    LoginTransaction.browser_hash == digest(old_browser)
-                )
-            )
-        session.add(
-            LoginTransaction(
-                state_hash=digest(state),
-                browser_hash=digest(browser),
-                verifier=verifier,
-                nonce=nonce,
-                return_path=return_path,
-                expires_at=expires(600),
-            )
-        )
-        session.commit()
-        challenge = (
-            base64.urlsafe_b64encode(hashlib.sha256(verifier.encode()).digest())
-            .rstrip(b"=")
-            .decode()
+        state, browser, verifier, nonce = store_login_transaction(
+            session, request.cookies.get("workroom_login", ""), return_path
         )
         response = RedirectResponse(
-            endpoint
-            + "auth?"
-            + urlencode(
-                {
-                    "client_id": settings.oidc_client_id,
-                    "response_type": "code",
-                    "scope": "openid email profile",
-                    "redirect_uri": callback,
-                    "state": state,
-                    "nonce": nonce,
-                    "code_challenge": challenge,
-                    "code_challenge_method": "S256",
-                }
+            authorization_url(
+                settings, endpoint, callback, state, nonce, pkce_challenge(verifier)
             ),
             status_code=303,
         )
@@ -250,105 +389,33 @@ def install_browser_auth(app, db):
     ):
         if not settings.browser_auth:
             return failed("unavailable")
-        browser = request.cookies.get("workroom_login", "")
-        row = session.get(LoginTransaction, digest(state)) if state else None
-        if (
-            not row
-            or row.expires_at <= now()
-            or not browser
-            or not secrets.compare_digest(row.browser_hash, digest(browser))
-        ):
-            return failed("invalid_state")
-        verifier, nonce, return_path = row.verifier, row.nonce, row.return_path
-        consumed = session.execute(
-            delete(LoginTransaction).where(
-                LoginTransaction.state_hash == row.state_hash,
-                LoginTransaction.expires_at > now(),
-            )
+        pending = consume_login_transaction(
+            session, state, request.cookies.get("workroom_login", "")
         )
-        session.commit()
-        if consumed.rowcount != 1:
+        if not pending:
             return failed("invalid_state")
+        verifier, nonce, return_path = pending
         if error or not code:
             return failed("cancelled")
         try:
-            with httpx.Client(
-                timeout=10, follow_redirects=False, transport=app.state.oidc_transport
-            ) as client:
-                token_response = client.post(
-                    endpoint + "token",
-                    auth=(settings.oidc_client_id, settings.oidc_client_secret),
-                    data={
-                        "grant_type": "authorization_code",
-                        "code": code,
-                        "redirect_uri": callback,
-                        "code_verifier": verifier,
-                    },
-                )
-            token_response.raise_for_status()
-            payload = token_response.json()
-            if not isinstance(payload, dict):
-                raise ValueError()
-            id_token = payload.get("id_token", "")
-            if not isinstance(id_token, str) or len(id_token) > 20000:
-                raise ValueError()
-            key = app.state.oidc_jwks.get_signing_key_from_jwt(id_token)
-            claims = jwt.decode(
-                id_token,
-                key.key,
-                algorithms=["RS256"],
-                audience=settings.oidc_client_id,
-                issuer=settings.oidc_issuer,
-                options={"require": ["exp", "iat", "sub", "email", "nonce"]},
+            id_token = exchange_code(
+                settings, endpoint, app.state.oidc_transport, callback, code, verifier
             )
-            if (
-                claims.get("nonce") != nonce
-                or claims.get("email_verified") is not True
-                or not isinstance(claims.get("sub"), str)
-                or len(claims["sub"]) > 250
-                or not isinstance(claims.get("email"), str)
-                or len(claims["email"]) > 320
-                or "@" not in claims["email"]
-            ):
-                raise ValueError()
-            audience = claims.get("aud")
-            if (
-                isinstance(audience, list) and len(audience) > 1 or "azp" in claims
-            ) and claims.get("azp") != settings.oidc_client_id:
-                raise ValueError()
-            canonical = {
-                "sub": subject_key(settings.oidc_issuer, claims["sub"]),
-                "email": claims["email"].lower(),
-                "email_verified": True,
-                "name": str(claims.get("name") or "Workspace owner")[:100],
-            }
+            claims, canonical = verify_id_token(
+                app.state.oidc_jwks, settings, id_token, nonce
+            )
             existing = session.scalar(
                 select(User).where(User.subject == canonical["sub"])
             )
             if existing and not existing.active:
                 return failed("account_disabled")
-            token = secrets.token_urlsafe(40)
-            old = request.cookies.get("workroom_session", "")
-            if old:
-                session.execute(
-                    delete(BrowserSession).where(
-                        BrowserSession.token_hash == digest(old)
-                    )
-                )
-            expiry = min(
-                datetime.fromtimestamp(claims["exp"], timezone.utc),
-                datetime.now(timezone.utc) + timedelta(hours=1),
+            token, expiry = create_browser_session(
+                session,
+                settings,
+                request.cookies.get("workroom_session", ""),
+                claims,
+                canonical,
             )
-            session.add(
-                BrowserSession(
-                    token_hash=digest(token),
-                    issuer=settings.oidc_issuer,
-                    claims=canonical,
-                    csrf_token=secrets.token_urlsafe(32),
-                    expires_at=expiry.isoformat(),
-                )
-            )
-            session.commit()
         except (httpx.HTTPError, jwt.PyJWTError, ValueError, TypeError, KeyError):
             session.rollback()
             return failed("sign_in_failed")
@@ -375,19 +442,7 @@ def install_browser_auth(app, db):
             delete(BrowserSession).where(BrowserSession.token_hash == digest(token))
         )
         session.commit()
-        response = JSONResponse(
-            {
-                "redirect_url": endpoint
-                + "logout?"
-                + urlencode(
-                    {
-                        "client_id": settings.oidc_client_id,
-                        "post_logout_redirect_uri": settings.app_origin
-                        + "/app/today?logged_out=1",
-                    }
-                )
-            }
-        )
+        response = JSONResponse({"redirect_url": logout_url(settings, endpoint)})
         response.delete_cookie(
             "workroom_session",
             path="/api",
