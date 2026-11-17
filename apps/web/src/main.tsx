@@ -38,6 +38,7 @@ function App() {
   const {
     route,
     assistantConversation,
+    assistantNonce,
     aiOpen,
     aiMounted,
     aiNewRequest,
@@ -203,7 +204,7 @@ function App() {
         >
           {aiMounted && (
             <Capture
-              key={assistantConversation || "workspace-capture"}
+              key={`${assistantConversation || "workspace-capture"}:${assistantNonce}`}
               compact
               newConversationRequest={aiNewRequest}
               aiStatus={aiStatus}
@@ -219,10 +220,12 @@ function App() {
                 history.replaceState(null, "", url.pathname + url.search);
               }}
               onTask={(task) => {
-                setTasks((rows) => [
-                  task,
-                  ...rows.filter((row) => row.id !== task.id),
-                ]);
+                // The list holds archived tasks only on the Archive route.
+                setTasks((rows) =>
+                  route === "archive"
+                    ? rows.map((row) => (row.id === task.id ? task : row))
+                    : [task, ...rows.filter((row) => row.id !== task.id)],
+                );
                 setNotice("Approved task changes saved to your board.");
               }}
               onOpenTask={(id) => {

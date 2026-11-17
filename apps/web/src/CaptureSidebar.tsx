@@ -1,4 +1,4 @@
-import { Plus } from "lucide-react";
+import { ChevronDown, ChevronUp, Plus } from "lucide-react";
 import type { CaptureApp } from "./useCaptureState";
 import { Button } from "./ui/Button";
 
@@ -24,7 +24,12 @@ export function CaptureSidebar({ app }: { app: CaptureApp }) {
             aria-expanded={showHistory}
             onClick={() => setShowHistory(!showHistory)}
           >
-            Conversations <span>{showHistory ? "−" : "+"}</span>
+            Conversations{" "}
+            {showHistory ? (
+              <ChevronUp size={14} aria-hidden="true" />
+            ) : (
+              <ChevronDown size={14} aria-hidden="true" />
+            )}
           </button>
         ) : (
           <strong>Conversations</strong>

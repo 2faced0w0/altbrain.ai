@@ -11,6 +11,7 @@ export function useTrackerApp() {
   const [assistantConversation, setAssistantConversation] = useState<
     string | null
   >(() => new URLSearchParams(location.search).get("conversation"));
+  const [assistantNonce, setAssistantNonce] = useState(0);
   const [aiOpen, setAiOpen] = useState(
     () =>
       routeFromPath() === "assistant" ||
@@ -194,6 +195,8 @@ export function useTrackerApp() {
     return () => clearTimeout(timer);
   }, [notice]);
   async function navigate(next: string) {
+    // Push first: showAi/hideAi rewrite the current URL, which must be the new page.
+    history.pushState(null, "", `/app/${next}`);
     if (next === "assistant") showAi("chat");
     else hideAi();
     window.scrollTo(0, 0);
@@ -203,7 +206,6 @@ export function useTrackerApp() {
     setFocusFilter("all");
     setStatusFilter("all");
     setPriority("all");
-    history.pushState(null, "", `/app/${next}`);
     if (next === "archive" || route === "archive") {
       setLoading(true);
       try {
@@ -238,6 +240,7 @@ export function useTrackerApp() {
       setSelected(null);
       setAiNewRequest(0);
       setAssistantConversation(row.id);
+      setAssistantNonce((n) => n + 1);
       aiCurrentConversation.current = row.id;
       setAiMounted(true);
       setAiView("chat");
@@ -308,6 +311,7 @@ export function useTrackerApp() {
     setRoute,
     assistantConversation,
     setAssistantConversation,
+    assistantNonce,
     aiOpen,
     setAiOpen,
     aiMounted,

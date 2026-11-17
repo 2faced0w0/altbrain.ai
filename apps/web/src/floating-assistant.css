@@ -121,7 +121,7 @@ html {
   padding: 0;
   width: 600px;
   max-width: calc(100% - 24px);
-  height: min(850px, calc(100dvh - 32px));
+  height: min(920px, calc(100dvh - 32px));
   max-height: calc(100dvh - 32px);
   border: 1px solid var(--line);
   border-radius: 24px;

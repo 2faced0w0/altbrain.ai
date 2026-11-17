@@ -16,22 +16,29 @@ export function CaptureProviderBar({ app }: { app: CaptureApp }) {
   } = app;
   return (
     <>
-      <div className="mock-banner">
-        <Sparkles size={18} />
-        <div>
-          <strong>
-            {external
-              ? `${provider?.label} · ${provider?.model || "configuration needed"}`
-              : "Deterministic mock · no external AI calls"}
-          </strong>
-          <p>
-            {external
-              ? "AI can miss details or make mistakes. Review every suggestion before approving."
-              : "This rule-based preview recognises simple request lines. It may miss tasks. Review every suggestion."}
-          </p>
+      {external ? (
+        <div className="mock-banner">
+          <Sparkles size={18} />
+          <div>
+            <strong>
+              {`${provider?.label} · ${provider?.model || "configuration needed"}`}
+            </strong>
+            <p>
+              AI can miss details or make mistakes. Review every suggestion
+              before approving.
+            </p>
+          </div>
+          <span>Review required</span>
         </div>
-        <span>{external ? "Review required" : "0 tokens"}</span>
-      </div>
+      ) : (
+        <p className="mock-note">
+          <Sparkles size={14} aria-hidden="true" />
+          <span>
+            <strong>Deterministic mock · no external AI calls.</strong> It may
+            miss tasks, so review every suggestion.
+          </span>
+        </p>
+      )}
       <div className="ai-provider-controls">
         <label>
           AI provider
@@ -52,7 +59,7 @@ export function CaptureProviderBar({ app }: { app: CaptureApp }) {
             ))}
           </select>
         </label>
-        {aiStatus && (
+        {aiStatus && external && (
           <small>
             {aiStatus.requests_used}/{aiStatus.request_limit} live requests · $
             {(aiStatus.reserved_micro_usd / 1000000).toFixed(3)} reserved of $
