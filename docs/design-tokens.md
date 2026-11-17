@@ -22,6 +22,18 @@
 | Text | `--text`, `--text-muted`, `--text-accent`, `--text-accent-strong`, `--text-on-accent`, `--text-danger`, `--text-warning`, `--text-info`, `--text-waiting` |
 | Elevation | `--shadow-faint`, `--shadow-xs`, `--shadow-soft`, `--shadow-md`, `--shadow-lg`, `--shadow-xl`, `--shadow-up`, `--shadow-launcher`, `--glow-ok`, `--scrim`, `--overlay-light` |
 
+## Type, spacing and radius
+
+Use these instead of raw `px` for `font-size`, `padding`, `margin`, `gap` and `border-radius` (hairlines of 1 to 3px and fixed layout sizes stay literal). Check with `grep -nE "(font-size|padding|margin|gap|radius):.*[0-9]px" apps/web/src/*.css`.
+
+| Scale | Tokens |
+|---|---|
+| Type | `--fs-xs` 11px (labels, pills, captions), `--fs-sm` 12px (secondary text), `--fs-md` 13px, `--fs-base` 14px (body), `--fs-lg` 16px, `--fs-xl` 20px, `--fs-2xl` 24px, `--fs-3xl` 28px, `--fs-4xl` 36px |
+| Spacing | `--space-1` 4px, `-2` 6px, `-3` 8px, `-4` 10px, `-5` 12px, `-6` 16px, `-7` 20px, `-8` 24px, `-9` 32px, `-10` 40px, `-11` 48px |
+| Radius | `--radius-xs` 4px, `--radius-sm` 6px, `--radius-md` 8px, `--radius-lg` 12px, `--radius-xl` 16px, and `50%` for circles |
+
+The old UI used 6 to 13px for nearly all text (190 of 270 declarations were 6 to 11px). Everything up to 10px now maps to 11px, and 11, 12 and 13px each moved up one step. Spacing values snapped to the nearest scale step (almost always within 1px); radii of 18px and above and the few fixed layout widths were left literal.
+
 ## How the tokens were derived
 
 363 distinct hex values (422 uses) were grouped by role and snapped to the nearest token. Backgrounds and borders barely moved (47 near-identical backgrounds became `--surface-tint`, 48 near-identical borders became `--line`). Text was reassigned by hue and lightness so that low-contrast greens became `--text-muted`, which is the intentional accessibility change.

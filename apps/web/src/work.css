@@ -1,7 +1,7 @@
 .task-work {
   border-top: 1px solid var(--line);
-  padding-top: 8px;
-  margin-top: 25px;
+  padding-top: var(--space-3);
+  margin-top: var(--space-8);
 }
 .task-work fieldset,
 .schedule-form fieldset {
@@ -24,8 +24,8 @@
 .work-progress strong {
   display: block;
   color: var(--text-accent);
-  font-size: 12px;
-  margin-bottom: 10px;
+  font-size: var(--fs-md);
+  margin-bottom: var(--space-4);
 }
 .work-progress progress {
   width: 100%;
@@ -35,41 +35,41 @@
 .work-progress p,
 .work-empty,
 .schedule-form > p {
-  font-size: 11px;
+  font-size: var(--fs-sm);
   color: var(--text-muted);
   line-height: 1.8;
-  margin: 9px 0 14px;
+  margin: var(--space-4) 0 var(--space-6);
 }
 .task-work h3 small {
   font-weight: 400;
   color: var(--text-muted);
-  margin-left: 7px;
+  margin-left: var(--space-3);
 }
 .work-item {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--space-3);
   border-bottom: 1px solid var(--line);
-  padding: 12px 0;
+  padding: var(--space-5) 0;
 }
 .work-item > label {
   display: flex;
-  gap: 9px;
+  gap: var(--space-4);
   align-items: flex-start;
   flex: 1;
-  font-size: 12px;
+  font-size: var(--fs-md);
   line-height: 1.7;
   overflow-wrap: anywhere;
   min-width: 0;
 }
 .work-item input[type="checkbox"] {
   accent-color: var(--accent);
-  margin-top: 4px;
+  margin-top: var(--space-1);
   flex-shrink: 0;
 }
 .text-button {
-  font-size: 11px;
+  font-size: var(--fs-sm);
   color: var(--text-accent);
   text-decoration: underline;
 }
@@ -77,35 +77,35 @@
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--space-3);
   background: var(--surface-tint);
-  padding: 12px;
-  border-radius: 5px;
+  padding: var(--space-5);
+  border-radius: var(--radius-sm);
 }
 .work-edit label {
-  font-size: 10px;
+  font-size: var(--fs-xs);
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--space-2);
   flex: 1;
   min-width: 100px;
 }
 .work-edit input,
 .inline-form input,
 .note-form textarea {
-  font-size: 12px;
+  font-size: var(--fs-md);
   background: var(--surface);
   border: 1px solid var(--line-sage);
-  border-radius: 5px;
-  padding: 9px;
+  border-radius: var(--radius-sm);
+  padding: var(--space-4);
   width: 100%;
   min-width: 0;
   line-height: 1.6;
 }
 .inline-form {
   display: flex;
-  gap: 8px;
-  margin-top: 14px;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
 }
 .inline-form input {
   flex: 1;
@@ -114,49 +114,49 @@
   resize: vertical;
 }
 .note-form button {
-  margin-top: 8px;
+  margin-top: var(--space-3);
 }
 .work-note {
   background: var(--surface-tint);
   border: 1px solid var(--line);
-  border-radius: 6px;
-  margin: 13px 0;
-  padding: 13px;
+  border-radius: var(--radius-sm);
+  margin: var(--space-5) 0;
+  padding: var(--space-5);
 }
 .work-note p {
   white-space: pre-wrap;
-  font-size: 12px;
+  font-size: var(--fs-md);
   line-height: 1.8;
   overflow-wrap: anywhere;
 }
 .work-note small {
   display: block;
-  margin-top: 9px;
-  font-size: 9px;
+  margin-top: var(--space-4);
+  font-size: var(--fs-xs);
   color: var(--text-muted);
 }
 .blocker-panel {
   border-left: 3px solid var(--line-warning);
   background: var(--surface-warning);
-  padding: 1px 12px 12px;
-  margin: 20px 0;
+  padding: 1px var(--space-5) var(--space-5);
+  margin: var(--space-7) 0;
 }
 .blocker-panel h3 {
-  margin-top: 12px;
+  margin-top: var(--space-5);
 }
 .blocker-panel p {
-  font-size: 12px;
+  font-size: var(--fs-md);
   color: var(--text-danger);
   line-height: 1.8;
   white-space: pre-wrap;
 }
 .schedule-form {
-  margin-top: 24px;
-  padding-top: 4px;
+  margin-top: var(--space-8);
+  padding-top: var(--space-1);
   border-top: 1px solid var(--line);
 }
 .schedule-dialog {
-  padding: 0 24px 24px;
+  padding: 0 var(--space-8) var(--space-8);
 }
 .schedule-dialog .schedule-form {
   margin-top: 0;
@@ -164,7 +164,7 @@
 }
 .calendar-reschedule {
   border-top: 1px solid var(--line);
-  padding: 18px;
+  padding: var(--space-7);
 }
 .calendar-reschedule label {
   max-width: 500px;
@@ -175,9 +175,9 @@
 }
 .task-progress-label {
   display: block;
-  font-size: 9px;
+  font-size: var(--fs-xs);
   color: var(--text-muted);
-  margin-top: 7px;
+  margin-top: var(--space-3);
 }
 .task-card:focus-visible {
   outline: 3px solid var(--line-accent);
@@ -209,20 +209,20 @@
     display: block;
   }
   .work-edit label {
-    margin-bottom: 10px;
+    margin-bottom: var(--space-4);
   }
   .work-item > label {
-    font-size: 13px;
+    font-size: var(--fs-base);
   }
   .note-form textarea,
   .inline-form input,
   .work-edit input {
-    font-size: 16px;
+    font-size: var(--fs-lg);
   }
   .calendar-reschedule {
-    padding: 15px;
+    padding: var(--space-6);
   }
   .task-work {
-    margin-top: 20px;
+    margin-top: var(--space-7);
   }
 }
