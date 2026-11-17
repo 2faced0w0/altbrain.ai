@@ -67,6 +67,8 @@ async function seed(page: Page) {
 
 async function shot(page: Page, name: string, mask: string[] = []) {
   await page.waitForLoadState("networkidle");
+  // Task details load their checklist asynchronously; wait so captures are stable.
+  await expect(page.getByText("Loading task details")).toHaveCount(0);
   await page.screenshot({
     path: path.join(outDir, `${name}.png`),
     fullPage: false,
