@@ -45,11 +45,14 @@ class LogoutResult(BaseModel):
 
 class RedactAuthQuery(logging.Filter):
     def filter(self, record):
-        if isinstance(record.args, tuple) and len(record.args) == 5:
-            values = list(record.args)
-            if isinstance(values[2], str) and values[2].startswith("/api/v1/auth/"):
-                values[2] = values[2].split("?", 1)[0]
-                record.args = tuple(values)
+        if isinstance(record.args, tuple):
+            # Match by value so a changed uvicorn argument layout cannot leak codes.
+            record.args = tuple(
+                value.split("?", 1)[0]
+                if isinstance(value, str) and value.startswith("/api/v1/auth/")
+                else value
+                for value in record.args
+            )
         return True
 
 

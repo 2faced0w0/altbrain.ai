@@ -78,6 +78,10 @@ Windows rejected binding PostgreSQL to 5432; this project's container uses **554
 
 Python's preinstalled compatible dependencies were used; psycopg was installed into ignored `.local/python-deps`. The launcher includes that folder in PYTHONPATH when present. Fresh setups should use the documented `.venv` and requirements. The initial two stalled sandbox test processes were interrupted during cleanup.
 
+## Review hardening (commit 73c81e7 follow-up)
+
+API responses now also send `X-Frame-Options: DENY`, `Referrer-Policy: no-referrer` and an API-scoped CSP (`default-src 'none'; frame-ancestors 'none'`); the interactive docs pages and the download endpoint keep their own policies. Access-log redaction of `/api/v1/auth/` query strings no longer depends on uvicorn's argument count. Model IDs containing `..` or a leading/trailing `/` are rejected at configuration time. CI now requests read-only repository permissions. Covered by `services/api/tests/test_hardening.py`; full API suite, ruff, typecheck and build pass. Playwright e2e was not re-run. Larger refactors and deployment-dependent items are recorded in `docs/open-decisions.md`.
+
 ## Remaining work
 
 - Validate and harden the local identity flow for a production deployment: TLS/hostnames, production Keycloak DB/backups, real SMTP, MFA/operator policy, global revocation and operational invitation access. Local sign-in is implemented; external beta remains gated.

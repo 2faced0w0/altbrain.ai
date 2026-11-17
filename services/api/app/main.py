@@ -55,6 +55,9 @@ from .schemas import (
 )
 
 
+DOCS_PATHS = frozenset({"/docs", "/redoc", "/docs/oauth2-redirect"})
+
+
 def create_app(settings: Settings | None = None, engine=None) -> FastAPI:
     settings = settings or Settings.load()
     settings.validate()
@@ -94,6 +97,13 @@ def create_app(settings: Settings | None = None, engine=None) -> FastAPI:
         response.headers["X-Request-ID"] = request.state.correlation_id
         response.headers["Cache-Control"] = "no-store"
         response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers.setdefault("Referrer-Policy", "no-referrer")
+        # The interactive API docs load their own scripts, so they keep their own policy.
+        if request.url.path not in DOCS_PATHS:
+            response.headers.setdefault(
+                "Content-Security-Policy", "default-src 'none'; frame-ancestors 'none'"
+            )
         return response
 
     @app.exception_handler(HTTPException)

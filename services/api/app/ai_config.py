@@ -40,7 +40,12 @@ class AISettings:
             "deepseek",
         }:
             raise RuntimeError("Unsupported AI provider")
-        if self.model and not re.fullmatch(r"[a-zA-Z0-9_.:/-]{1,100}", self.model):
+        if self.model and (
+            not re.fullmatch(r"[a-zA-Z0-9_.:/-]{1,100}", self.model)
+            or ".." in self.model
+            or self.model.startswith("/")
+            or self.model.endswith("/")
+        ):
             raise RuntimeError("Choose an explicit model ID")
         if (
             not 1 <= self.max_requests <= 1000
