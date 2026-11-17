@@ -3,9 +3,9 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 12px;
-  border: 1px solid #cddcbd;
+  border: 1px solid var(--line-sage);
   border-radius: 8px;
-  background: #eaf1e0;
+  background: var(--surface-tint);
   padding: 16px;
   margin-bottom: 20px;
 }
@@ -21,7 +21,7 @@
 }
 .selected-task-context span {
   display: block;
-  color: #657951;
+  color: var(--text-muted);
   font-size: 10px;
   margin-top: 5px;
 }
@@ -42,14 +42,14 @@
 .update-diff td {
   text-align: left;
   padding: 10px 8px;
-  border: 1px solid #e0e7d6;
+  border: 1px solid var(--line);
   overflow-wrap: anywhere;
   line-height: 1.7;
   vertical-align: top;
 }
 .update-diff thead th {
-  background: #f0f5e9;
-  color: #586f43;
+  background: var(--surface-tint);
+  color: var(--text-accent);
 }
 .update-diff tbody th {
   font-weight: 500;
@@ -57,8 +57,8 @@
   text-transform: capitalize;
 }
 .update-diff tbody td:last-child {
-  background: #f3f7ed;
-  color: #4c6b36;
+  background: var(--surface-tint);
+  color: var(--text-accent);
 }
 .change-reason {
   display: flex;
@@ -69,7 +69,7 @@
   margin: 5px 0 17px;
 }
 .change-reason input {
-  accent-color: #5b7843;
+  accent-color: var(--accent);
 }
 .task-update-card .error-banner {
   display: block;
@@ -116,5 +116,5 @@
   font-size: 13px;
   line-height: 1.8;
   margin: 12px 0;
-  color: #4d6639;
+  color: var(--text-accent);
 }

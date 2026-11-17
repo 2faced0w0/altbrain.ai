@@ -1,0 +1,59 @@
+/* Design tokens: the single source of color values. */
+:root {
+  /* Surfaces and accents */
+  --surface: #ffffff;
+  --surface-page: #fcfdf9;
+  --surface-tint: #f1f5e9;
+  --surface-sage: #dfe9d1;
+  --surface-sage-strong: #cad8b7;
+  --surface-danger: #f9e9e3;
+  --surface-warning: #f6eee4;
+  --surface-warning-strong: #e7dcc8;
+  --surface-info: #eff3f5;
+  --surface-waiting: #f3eff7;
+  --accent: #546e3f;
+  --accent-strong: #465e32;
+  --accent-soft: #90a66f;
+  --accent-light: #a7d47b;
+  --sage-300: #a4b48a;
+  --ink: #2b4028;
+  --signal-warning: #bca160;
+  --signal-waiting: #a79cc1;
+  --signal-danger: #ce968a;
+  --signal-info: #86a3bb;
+  /* Lines */
+  --line: #e0e6d7;
+  --line-sage: #d3e0c5;
+  --line-strong: #baca9f;
+  --line-warm: #ebdbc6;
+  --line-danger: #dfc5b7;
+  --line-accent: #607c47;
+  --line-accent-strong: #496337;
+  --line-warning: #b18a60;
+  /* Text */
+  --text: #30362f;
+  --text-muted: #5b6951;
+  --text-accent: #4f6b39;
+  --text-accent-strong: #3a5329;
+  --text-on-accent: #ffffff;
+  --text-danger: #9a5746;
+  --text-warning: #745a1c;
+  --text-info: #46687e;
+  --text-waiting: #77608e;
+  /* Interaction */
+  --focus-ring: #546e3f;
+  /* Native controls (progress, checkbox): Chrome derives the track from this, so keep it mid-tone. */
+  --accent-control: #6e8b50;
+  /* Elevation and overlays */
+  --shadow-faint: 0 3px 6px #54683d09;
+  --shadow-xs: 0 2px 2px #344a1e0d;
+  --shadow-soft: 0 10px 35px #405a2510;
+  --shadow-md: 0 4px 20px #283a2326;
+  --shadow-lg: 0 20px 100px #22331422;
+  --shadow-xl: 0 24px 80px #17281240;
+  --shadow-up: 0 -3px 12px #526c3310;
+  --shadow-launcher: 0 5px 24px #344f2533, 0 0 18px #b0c18e44;
+  --glow-ok: 0 0 8px #c8e5a3;
+  --scrim: #26331e55;
+  --overlay-light: #ffffff18;
+}

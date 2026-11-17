@@ -31,7 +31,7 @@
 .calendar-footnote,
 .settings-card > p,
 .build-line {
-  color: #69775e;
+  color: var(--text-muted);
 }
 .focus-note p,
 .focus-note button,
@@ -41,57 +41,57 @@
 .privacy-line,
 .detail-description,
 .help-content p {
-  color: #64764f;
+  color: var(--text-muted);
 }
 .category-chip {
-  color: #5f7548;
+  color: var(--text-accent);
 }
 .category-assessment {
-  color: #806a4f;
+  color: var(--text-danger);
 }
 .category-other {
-  color: #59717a;
+  color: var(--text-info);
 }
 .priority-badge {
-  color: #68785a;
+  color: var(--text-muted);
 }
 .priority-badge.high {
-  color: #8c6d28;
+  color: var(--text-warning);
 }
 .priority-badge.urgent,
 .overdue {
-  color: #9a5746 !important;
+  color: var(--text-danger) !important;
 }
 .priority-badge.low {
-  color: #647e47;
+  color: var(--text-accent);
 }
 .status-pill.in_progress {
-  color: #856722;
+  color: var(--text-warning);
 }
 .status-pill.waiting {
-  color: #77608e;
+  color: var(--text-waiting);
 }
 .status-pill.blocked {
-  color: #9b6456;
+  color: var(--text-danger);
 }
 .status-pill.in_review {
-  color: #52768e;
+  color: var(--text-info);
 }
 .filter-group select,
 .view-tabs button,
 .search-field input::placeholder {
-  color: #69785e;
+  color: var(--text-muted);
 }
 .focus-filter {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #eaf0df;
-  border: 1px solid #d5dfc5;
+  background: var(--surface-tint);
+  border: 1px solid var(--line-sage);
   padding: 10px 14px;
   border-radius: 6px;
   font-size: 11px;
-  color: #5d7247;
+  color: var(--text-accent);
   margin-bottom: 15px;
 }
 .focus-filter button {

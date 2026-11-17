@@ -14,6 +14,7 @@ import * as api from "./api";
 import { Capture } from "./Capture";
 import { AuthGate } from "./AuthGate";
 import { FloatingAssistant } from "./FloatingAssistant";
+import "./tokens.css";
 import "./styles.css";
 import "./readability.css";
 import "./work.css";
