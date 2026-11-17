@@ -11,6 +11,7 @@
     "typecheck": "npm run typecheck --workspace apps/web",
     "contracts": "python scripts/generate_contracts.py && openapi-typescript packages/contracts/openapi.json -o apps/web/src/schema.d.ts",
     "test:e2e": "playwright test",
+    "test:visual": "playwright test --config playwright.visual.config.ts",
     "format": "prettier --write apps/web/src/*.tsx apps/web/src/api.ts"
   },
   "devDependencies": {
